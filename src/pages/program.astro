@@ -149,7 +149,15 @@ const regPh = site.registerUrlIsPlaceholder ? 'register-link' : undefined;
   .prog-hero-inner { padding-top: 96px; padding-bottom: 72px; display: flex; flex-direction: column; gap: 24px; }
   .timebar { display: flex; gap: 6px; padding-top: 24px; }
   .timebar-seg { min-width: 0; display: flex; flex-direction: column; gap: 10px; }
-  .timebar-bar { height: 10px; border-radius: 999px; }
+  .timebar-bar { height: 10px; border-radius: 999px; transform-origin: left center; }
+  /* The afternoon fills in left to right after the title arrives. */
+  @media (prefers-reduced-motion: no-preference) {
+    .timebar-seg .timebar-bar { animation: bar-grow 900ms cubic-bezier(0.22, 1, 0.36, 1) backwards; }
+    .timebar-seg:nth-child(1) .timebar-bar { animation-delay: 450ms; }
+    .timebar-seg:nth-child(2) .timebar-bar { animation-delay: 600ms; }
+    .timebar-seg:nth-child(3) .timebar-bar { animation-delay: 750ms; }
+    .timebar-seg:nth-child(4) .timebar-bar { animation-delay: 900ms; }
+  }
   .timebar-minor { font-size: 13px; font-weight: 600; color: var(--on-blue); }
   .timebar-label { font-size: 14px; font-weight: 700; }
   @media (max-width: 720px) {

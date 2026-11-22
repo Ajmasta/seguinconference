@@ -1,0 +1,76 @@
+/*
+ * Motion for the whole site. Inspired by the reveal system in soignetonavenir.
+ *
+ * 1. Page entrance: the first section's content rises in, one block after another (desktop only,
+ *    so phones show the first screen immediately).
+ * 2. Scroll reveal: blocks further down stay hidden until src/scripts/motion.ts sees them,
+ *    then rise (up), scale in (pop) or slide in (side). Siblings cascade via --reveal-i.
+ *    The list of revealed blocks lives in REVEAL_GROUPS in motion.ts; keep the selector below in sync.
+ * 3. Hover: cards lift slightly on devices with a mouse.
+ *
+ * Without JavaScript nothing is hidden (rules only apply under html.js). With
+ * prefers-reduced-motion everything is simply shown.
+ */
+
+:root {
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-soft: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes page-enter { from { opacity: 0; translate: 0 18px; } }
+@keyframes reveal-up { from { opacity: 0; translate: 0 36px; } }
+@keyframes reveal-pop { from { opacity: 0; scale: 0.92; translate: 0 12px; } }
+@keyframes reveal-side { from { opacity: 0; translate: -48px 0; } }
+@keyframes bar-grow { from { scale: 0 1; } }
+
+@media (prefers-reduced-motion: no-preference) {
+  /* ---- 1. Page entrance (first section) ---- */
+  @media (min-width: 768px) {
+    main > section:first-child > [class*='container'] > * {
+      animation: page-enter 700ms var(--ease-out) backwards;
+      animation-delay: calc(var(--enter-step, 5) * 90ms + 60ms);
+    }
+    main > section:first-child > [class*='container'] > :nth-child(1) { --enter-step: 0; }
+    main > section:first-child > [class*='container'] > :nth-child(2) { --enter-step: 1; }
+    main > section:first-child > [class*='container'] > :nth-child(3) { --enter-step: 2; }
+    main > section:first-child > [class*='container'] > :nth-child(4) { --enter-step: 3; }
+    main > section:first-child > [class*='container'] > :nth-child(5) { --enter-step: 4; }
+  }
+
+  /* ---- 2. Scroll reveal ---- */
+  html.js:not(.motion-fallback) :is(
+    .section-head, .agenda-head, .judged-head, .runs-head, .reps-head,
+    main section > h2, main section > .container > h2,
+    .why-copy > .stack, .why-text > p, .ch-text > p,
+    .tribute, .soon, .cta, .cc-teaser, .join, .now, .partner, .keynote, .agenda, .accordion,
+    .winners-card, .abs-list > li, .update, .stat-inner, .fq-main > .stack, .extras > *, .pub, .tm-top,
+    .program-grid > *, .pillars > *, .glance > *, .criteria > *, .runs-grid > *, .people > *,
+    .judge-grid > *, .grid-340 > *, .grid-320 > *, .winners > *, .workshops > *, .join-steps > li,
+    .timeline > li, .stats > .stat, .mosaic > *,
+    .why-img, .ch-img
+  ):not([data-revealed]) {
+    opacity: 0;
+  }
+
+  [data-revealed] {
+    animation: reveal-up 850ms var(--ease-out) backwards;
+    animation-delay: calc(var(--reveal-i, 0) * 90ms);
+  }
+  [data-revealed='pop'] { animation-name: reveal-pop; }
+  [data-revealed='side'] { animation-name: reveal-side; animation-duration: 1000ms; }
+
+  /* ---- 3. Hover lift (mouse only) ---- */
+  @media (hover: hover) {
+    .card-link, .glance-card, .crit, .pillar, .role, .person, .judge, .ws, .winner, .group, .tile {
+      transition: translate 220ms var(--ease-out), box-shadow 220ms var(--ease-out), border-color 150ms ease;
+    }
+    .card-link:hover, .glance-card:hover, .crit:hover, .pillar:hover, .role:hover, .person:hover,
+    .judge:hover, .ws:hover, .winner:hover, .group:hover, .tile:hover {
+      translate: 0 -4px;
+      box-shadow: 0 1px 2px rgba(11, 31, 58, 0.04), 0 18px 36px -22px rgba(11, 31, 58, 0.45);
+    }
+    .btn { transition: background-color .15s ease, border-color .15s ease, color .15s ease, translate 180ms var(--ease-out), box-shadow 180ms var(--ease-out); }
+    .btn:hover { translate: 0 -2px; box-shadow: 0 10px 22px -14px rgba(37, 99, 235, 0.8); }
+    .btn:active { translate: 0 0; box-shadow: none; }
+  }
+}
