@@ -8,7 +8,7 @@ export interface Abstract {
   abstract: string;
   slidesUrl?: string;
 }
-export interface Winner { place: number; placeholder?: boolean; title: string; team: string }
+export interface Winner { place: number; label?: string; placeholder?: boolean; title: string; team: string }
 export interface Year {
   year: string;
   theme: string;

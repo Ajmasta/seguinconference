@@ -17,7 +17,8 @@ const { title, description, current, footer = 'simple', footerLastLink = 'faq' }
 
 const og = await getImage({ src: heroBeam, width: 1200, format: 'jpg' });
 const ogUrl = new URL(og.src, Astro.site).href;
-const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const path = Astro.url.pathname.endsWith('/') ? Astro.url.pathname : `${Astro.url.pathname}/`;
+const canonical = new URL(path, Astro.site).href;
 ---
 <!doctype html>
 <html lang="en">

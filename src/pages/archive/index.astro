@@ -45,7 +45,7 @@ import { url } from '../../lib/url';
             <div class="winners">
               {y.winners.map((w) => (
                 <div class:list={['winner', { 'winner--first on-dark': w.place === 1 }]} data-placeholder={w.placeholder ? 'winner' : undefined}>
-                  <span class="win-place">{placeLabel(w.place)}</span>
+                  <span class="win-place">{w.label ?? placeLabel(w.place)}</span>
                   <span class="head" style="font-size:18px">{w.title}</span>
                   <span class="win-team">{w.team}</span>
                 </div>

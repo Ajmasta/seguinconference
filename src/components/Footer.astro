@@ -38,7 +38,7 @@ const { variant = 'simple', lastLink = 'faq' } = Astro.props;
           <a href={url('/faq')}>FAQ</a>
         </div>
       </div>
-      <div class="container foot-bottom">© {site.year} SCPEC. Registration data is used only to run the conference.</div>
+      <div class="container foot-bottom">© {new Date().getFullYear()} SCPEC. Registration data is used only to run the conference.</div>
     </>
   ) : (
     <div class="container foot-simple">

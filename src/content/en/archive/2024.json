@@ -1,26 +1,22 @@
 {
-  "_note": "Placeholders until VP Research confirms winners, themes and publication consent. Each abstract gets its own page at /archive/2024/<slug>. Keep slugs short, lowercase and unique within the year; do not change a slug once published (authors link to it).",
+  "_note": "Placeholders until VP Research confirms winners, themes and publication consent. Each abstract gets its own page at /archive/2024/<slug>. Keep slugs short, lowercase and unique within the year; do not change a slug once published (authors link to it). 2024 had two grant winners (VP Research files).",
   "year": "2024",
-  "theme": "[2024 theme]",
-  "themePlaceholder": true,
+  "theme": "Facilitating Inter-University Collaboration through the Changing Landscape of Ultrasound Technology",
+  "themePlaceholder": false,
   "winners": [
     {
       "place": 1,
       "placeholder": true,
       "title": "[Project title]",
-      "team": "[Team · School]"
+      "team": "[Team · School]",
+      "label": "Grant winner"
     },
     {
       "place": 2,
       "placeholder": true,
       "title": "[Project title]",
-      "team": "[Team · School]"
-    },
-    {
-      "place": 3,
-      "placeholder": true,
-      "title": "[Project title]",
-      "team": "[Team · School]"
+      "team": "[Team · School]",
+      "label": "Grant winner"
     }
   ],
   "abstracts": [

@@ -1,8 +1,8 @@
 {
   "_note": "Placeholders until VP Research confirms winners, themes and publication consent. Each abstract gets its own page at /archive/2025/<slug>. Keep slugs short, lowercase and unique within the year; do not change a slug once published (authors link to it).",
   "year": "2025",
-  "theme": "[2025 theme]",
-  "themePlaceholder": true,
+  "theme": "Breaking Barriers in UGME POCUS Education: Innovate to Educate",
+  "themePlaceholder": false,
   "winners": [
     {
       "place": 1,
