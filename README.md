@@ -19,7 +19,7 @@ Everything that changes each year is a JSON file in `src/content/en/`:
 
 | File | What it holds |
 |---|---|
-| `site.json` | Registration links, dates, theme, email, Instagram, template/sponsorship links, newsletter endpoint, school list |
+| `site.json` | Registration links, dates, theme, email, Instagram, template/sponsorship links, newsletter endpoint |
 | `agenda.json` | Program times (minutes after midnight Eastern) and the time zones |
 | `speakers.json` | Keynote, workshop mentors, judges (headshots go in `src/assets/headshots/`) |
 | `team.json` | Leadership, regional reps, advisor |

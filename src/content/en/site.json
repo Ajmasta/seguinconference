@@ -19,6 +19,5 @@
   "slideTemplateUrl": "",
   "sponsorshipPackageUrl": "",
   "newsletterAction": "",
-  "_newsletterNote": "Paste a Formspree endpoint (https://formspree.io/f/xxxx) or a similar form URL into newsletterAction to make the FAQ signup form work.",
-  "schools": ["Memorial", "Dalhousie", "Laval", "Sherbrooke", "Montréal", "McGill", "Ottawa", "Queen's", "Toronto", "TMU", "McMaster", "Western", "NOSM", "Manitoba", "Saskatchewan", "Alberta", "Calgary", "UBC"]
+  "_newsletterNote": "Paste a Formspree endpoint (https://formspree.io/f/xxxx) or a similar form URL into newsletterAction to make the FAQ signup form work."
 }

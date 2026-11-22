@@ -60,14 +60,6 @@ const regPh = site.registerUrlIsPlaceholder ? 'register-link' : undefined;
     </div>
   </section>
 
-  <!-- School marquee -->
-  <section class="marquee-band" aria-label="Schools across Canada">
-    <ul class="marquee" role="list">
-      {site.schools.map((s) => <li>{s}</li>)}
-      {site.schools.map((s) => <li aria-hidden="true">{s}</li>)}
-    </ul>
-  </section>
-
   <!-- Program cards -->
   <section class="container section">
     <div class="section-head">
@@ -248,18 +240,7 @@ const regPh = site.registerUrlIsPlaceholder ? 'register-link' : undefined;
     .tz-link { margin-left: 0; }
   }
 
-  .marquee-band { background: var(--navy); border-top: 1px solid rgba(255,255,255,0.08); overflow: hidden; padding: 20px 0; }
-  .marquee {
-    list-style: none; margin: 0; padding: 0; display: flex; gap: 48px; width: max-content;
-    font-family: var(--font-head); font-weight: 700; font-size: 18px; color: var(--light-blue); white-space: nowrap;
-    animation: marquee 40s linear infinite;
-  }
-  .marquee li { margin: 0; }
-  .marquee-band:hover .marquee { animation-play-state: paused; }
-  @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(calc(-50% - 24px)); } }
   @media (prefers-reduced-motion: reduce) {
-    .marquee { animation: none; flex-wrap: wrap; width: auto; justify-content: center; padding: 0 var(--gutter); gap: 12px 32px; }
-    .marquee li[aria-hidden='true'] { display: none; }
     .live-dot { animation: none; }
   }
 
