@@ -1,0 +1,94 @@
+---
+import Logo from './Logo.astro';
+import Icon from './Icon.astro';
+import site from '../content/en/site.json';
+import { url } from '../lib/url';
+
+interface Props { current?: string }
+const { current } = Astro.props;
+
+const links = [
+  { key: 'about', href: '/about', label: 'About' },
+  { key: 'program', href: '/program', label: 'Program' },
+  { key: 'case-competition', href: '/case-competition', label: 'Case Competition' },
+  { key: 'speakers', href: '/speakers', label: 'Speakers' },
+  { key: 'archive', href: '/archive', label: 'Archive' },
+  { key: 'team', href: '/team', label: 'Team' },
+  { key: 'faq', href: '/faq', label: 'FAQ' },
+];
+---
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href={url('/')} aria-label="SCPEC home">
+      <Logo />
+      <span>SCPEC</span>
+    </a>
+    <div class="header-actions">
+      <a class="btn btn-primary header-register header-register--mobile" href={site.registerUrl} data-placeholder={site.registerUrlIsPlaceholder ? 'register-link' : undefined}>Register</a>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="main-nav">
+        <span class="icon-open"><Icon name="menu" /></span>
+        <span class="icon-close"><Icon name="close" /></span>
+        <span class="visually-hidden">Menu</span>
+      </button>
+    </div>
+    <nav id="main-nav" class="nav" aria-label="Main">
+      {links.map((l) => (
+        <a href={url(l.href)} aria-current={current === l.key ? 'page' : undefined}>{l.label}</a>
+      ))}
+      <a class="btn btn-primary header-register header-register--desktop" href={site.registerUrl} data-placeholder={site.registerUrlIsPlaceholder ? 'register-link' : undefined}>Register</a>
+    </nav>
+  </div>
+</header>
+
+<script>
+  const toggle = document.querySelector<HTMLButtonElement>('.menu-toggle');
+  const header = document.querySelector('.site-header');
+  toggle?.addEventListener('click', () => {
+    const open = toggle.getAttribute('aria-expanded') !== 'true';
+    toggle.setAttribute('aria-expanded', String(open));
+    header?.classList.toggle('is-open', open);
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && header?.classList.contains('is-open')) {
+      header.classList.remove('is-open');
+      toggle?.setAttribute('aria-expanded', 'false');
+      toggle?.focus();
+    }
+  });
+</script>
+
+<style>
+  .site-header { background: #fff; border-bottom: 1px solid var(--border); }
+  .header-inner {
+    padding-top: 16px; padding-bottom: 16px;
+    display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px;
+  }
+  .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; color: var(--navy); }
+  .brand span { font-family: var(--font-head); font-weight: 800; font-size: 20px; letter-spacing: 0.02em; }
+  .brand:hover { color: var(--navy); }
+  .nav { display: flex; flex-wrap: wrap; align-items: center; gap: 24px; font-size: 15px; font-weight: 500; }
+  .nav a:not(.btn) { color: var(--navy); text-decoration: none; padding: 6px 0; }
+  .nav a:not(.btn):hover { color: var(--blue); }
+  .nav a[aria-current='page'] { color: var(--blue); font-weight: 600; }
+  .header-register { padding: 12px 20px; font-size: 15px; }
+  .header-actions { display: none; align-items: center; gap: 8px; }
+  .menu-toggle {
+    display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px;
+    border: 1px solid var(--border); border-radius: 8px; background: #fff; color: var(--navy); cursor: pointer;
+  }
+  .icon-close { display: none; }
+
+  @media (max-width: 1020px) {
+    .header-actions { display: flex; }
+    .header-register--desktop { display: none; }
+    .nav {
+      display: none; flex-basis: 100%; flex-direction: column; align-items: stretch; gap: 0;
+      border-top: 1px solid var(--border); padding-top: 8px; font-size: 17px;
+    }
+    .nav a:not(.btn) { padding: 12px 0; border-bottom: 1px solid var(--border-soft); }
+    .site-header.is-open .nav { display: flex; }
+    .site-header.is-open .icon-open { display: none; }
+    .site-header.is-open .icon-close { display: inline; }
+  }
+  @media (max-width: 1020px) { .icon-open, .icon-close { line-height: 0; } }
+</style>

@@ -1,0 +1,18 @@
+{
+  "_note": "No photos of people on the Team or About pages (team request). Leave a rep's name empty to show 'Open: join us'.",
+  "heroSchools": ["Sherbrooke", "TMU", "Ottawa", "Toronto", "UBC", "Western", "McGill", "Alberta", "Montréal", "McMaster", "Queen's", "Calgary"],
+  "teams": [
+    { "name": "Chairs", "what": "Lead the conference and run conference day.", "members": [{ "name": "Munazzah Jaffer", "detail": "Sherbrooke · PGY1" }, { "name": "Nilah Ahimsadasan", "detail": "TMU · PGY1" }] },
+    { "name": "Vice-Chairs", "what": "Coordinate the portfolios and the program.", "members": [{ "name": "Justin Phung", "detail": "Ottawa · MS4" }, { "name": "Linda Wu", "detail": "Toronto · MS3" }] },
+    { "name": "Communications", "what": "Promotion, speakers, registration and the website.", "members": [{ "name": "Adrien Moevus", "detail": "Sherbrooke · MS2" }, { "name": "Helen Hsiao", "detail": "UBC · MS4" }] },
+    { "name": "Research", "what": "Case competition, judging and evaluation.", "members": [{ "name": "Samin Barakati", "detail": "Western · MS3" }, { "name": "Tiffany Chen", "detail": "McGill · MS3" }] },
+    { "name": "Finance", "what": "Budget, sponsors and project grants.", "members": [{ "name": "Martina Alkot", "detail": "McGill · MS3" }, { "name": "Ali Qureshi", "detail": "Alberta · MS2" }] }
+  ],
+  "regions": [
+    { "name": "Quebec", "reps": [{ "school": "McGill", "name": "Marie Sun" }, { "school": "Sherbrooke", "name": "Laura Timotin" }, { "school": "Montréal", "name": "Meryem Houjib" }, { "school": "Laval", "name": "" }] },
+    { "name": "Ontario", "reps": [{ "school": "Western", "name": "Jana Khanafer" }, { "school": "McMaster", "name": "Samarah Maqbool" }, { "school": "Queen's", "name": "Hassait Hilawe" }, { "school": "Ottawa", "name": "Ameya Kabra" }, { "school": "TMU", "name": "Bhavneet Bhangu" }, { "school": "Toronto", "name": "" }] },
+    { "name": "Western Canada", "reps": [{ "school": "UBC", "name": "Oswin Chang" }, { "school": "Calgary", "name": "Hinna Ahsan" }, { "school": "Alberta", "name": "" }] }
+  ],
+  "advisor": { "name": "Dr. Chris Tsoutsoulas", "detail": "Emergency Medicine, University of Toronto" },
+  "openSpots": "Laval, Toronto and Alberta reps"
+}

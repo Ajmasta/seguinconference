@@ -1,0 +1,135 @@
+---
+import Base from '../layouts/Base.astro';
+import site from '../content/en/site.json';
+import faq from '../content/en/faq.json';
+---
+<Base
+  title="FAQ & Contact · SCPEC 2027"
+  description="Answers about SCPEC 2027: cost, who can attend, time zones, the Zoom link and more. Contact the team or sign up for conference updates."
+  current="faq"
+  footerLastLink="home"
+>
+  <section class="fq-hero">
+    <div class="container fq-hero-inner">
+      <div class="stack" style="flex:1 1 560px;min-width:0;gap:20px">
+        <div class="eyebrow">FAQ &amp; contact</div>
+        <h1 class="display display-72">Questions?<br /><span class="blue">We've got answers.</span></h1>
+      </div>
+      <div class="flex-wrap" style="gap:12px">
+        <a class="btn btn-navy" href={`mailto:${site.email}`}>Email us</a>
+        <a class="btn btn-outline" href={site.instagram} style="border-radius:10px">{site.instagramHandle}</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="container fq-main">
+    <div class="card accordion">
+      {faq.items.map((f, i) => (
+        <div class="acc-item" data-placeholder={f.placeholder ? 'faq-answer' : undefined}>
+          <h2 class="acc-h">
+            <button class="acc-q" type="button" id={`faq-q-${i}`} aria-expanded={i === 0 ? 'true' : 'false'} aria-controls={`faq-a-${i}`}>
+              <span>{f.q}</span>
+              <span class="acc-sign" aria-hidden="true">{i === 0 ? '−' : '+'}</span>
+            </button>
+          </h2>
+          <div class="acc-a" id={`faq-a-${i}`} role="region" aria-labelledby={`faq-q-${i}`} hidden={i !== 0}>
+            <p>{f.a}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <div class="stack" style="flex:1 1 320px;min-width:0;gap:24px">
+      <div class="contact on-dark">
+        <span class="head" style="font-size:22px">Contact us</span>
+        <a href={`mailto:${site.email}`} style="color:#fff;font-size:17px;font-weight:600">{site.email}</a>
+        <a href={site.instagram} style="color:var(--on-dark);font-size:16px">Instagram {site.instagramHandle}</a>
+        <span style="font-size:14px;line-height:1.5;color:var(--on-dark)">We usually reply within a few days.</span>
+      </div>
+      <form class="card news" action={site.newsletterAction || undefined} method="post" data-placeholder={site.newsletterAction ? undefined : 'newsletter-endpoint'} data-news>
+        <h2 class="head" style="font-size:20px">Get conference updates</h2>
+        <label for="news-email" style="font-size:14px;font-weight:600;color:var(--grey-dark)">Email address</label>
+        <input id="news-email" name="email" type="email" placeholder="you@school.ca" autocomplete="email" required />
+        <button class="btn btn-primary" type="submit" style="font-size:15px">Subscribe</button>
+        <span class="news-msg muted" role="status" style="font-size:13px">A few emails a year. Unsubscribe anytime.</span>
+      </form>
+    </div>
+  </section>
+
+  <section class="container section-last" style="padding-top:96px">
+    <div class="partner pad-56">
+      <div class="stack" style="gap:8px;max-width:680px">
+        <span class="head" style="font-size:26px">Partner with SCPEC</span>
+        <span style="font-size:16px;line-height:1.55;color:var(--grey-dark)">Support student-led POCUS education across Canada. Partners are recognized on this site and at the conference.</span>
+      </div>
+      <a class="btn btn-outline" href={site.sponsorshipPackageUrl || `mailto:${site.email}?subject=Sponsorship%20package`} data-placeholder={site.sponsorshipPackageUrl ? undefined : 'sponsorship-pdf'}>Sponsorship package (PDF)</a>
+    </div>
+  </section>
+</Base>
+
+<script>
+  // Accordion: one item open at a time.
+  const qs = document.querySelectorAll<HTMLButtonElement>('.acc-q');
+  qs.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const opening = btn.getAttribute('aria-expanded') !== 'true';
+      qs.forEach((b) => {
+        const on = b === btn && opening;
+        b.setAttribute('aria-expanded', String(on));
+        b.querySelector('.acc-sign')!.textContent = on ? '−' : '+';
+        document.getElementById(b.getAttribute('aria-controls')!)!.hidden = !on;
+      });
+    });
+  });
+
+  // Newsletter: posts to the endpoint in site.json (e.g. Formspree). Until one is set, explain instead.
+  const form = document.querySelector<HTMLFormElement>('[data-news]');
+  const msg = form?.querySelector<HTMLElement>('.news-msg');
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!msg) return;
+    const action = form.getAttribute('action');
+    if (!action) {
+      msg.textContent = 'Sign-up is not open yet. Follow @seguincpec on Instagram for updates.';
+      return;
+    }
+    msg.textContent = 'Sending…';
+    try {
+      const res = await fetch(action, { method: 'POST', body: new FormData(form), headers: { Accept: 'application/json' } });
+      msg.textContent = res.ok ? 'Thanks! You are on the list.' : 'Something went wrong. Please email us instead.';
+      if (res.ok) form.reset();
+    } catch {
+      msg.textContent = 'Something went wrong. Please email us instead.';
+    }
+  });
+</script>
+
+<style>
+  .fq-hero { background: #fff; border-bottom: 1px solid var(--border); }
+  .fq-hero-inner { padding-top: 96px; padding-bottom: 80px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 32px; }
+  .fq-main { padding-top: 72px; display: flex; flex-wrap: wrap; gap: 48px; align-items: flex-start; }
+  .accordion { flex: 2 1 600px; min-width: 0; overflow: hidden; }
+  .acc-item { border-bottom: 1px solid var(--border); }
+  .acc-item:last-child { border-bottom: none; }
+  .acc-h { margin: 0; font: inherit; }
+  .acc-q {
+    width: 100%; min-height: 64px; display: flex; justify-content: space-between; align-items: center; gap: 16px;
+    padding: 20px 28px; background: #fff; border: none; text-align: left; cursor: pointer;
+    font: 600 17px var(--font-body); color: var(--navy);
+  }
+  .acc-q:hover { background: #F7F9FC; }
+  .acc-q:focus-visible { outline-offset: -3px; }
+  .acc-sign { font-size: 22px; color: var(--blue); line-height: 1; }
+  .acc-a p { padding: 0 28px 24px; font-size: 16px; line-height: 1.6; color: var(--grey); }
+  .contact { background: var(--navy); color: #fff; border-radius: 16px; padding: 32px; display: flex; flex-direction: column; gap: 14px; }
+  .news { padding: 32px; display: flex; flex-direction: column; gap: 12px; }
+  .news input { min-height: 44px; padding: 10px 14px; border: 1px solid var(--input-border); border-radius: 8px; font: 15px var(--font-body); color: var(--navy); }
+  .partner { background: var(--pale-blue); border-radius: 24px; padding: 48px 56px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 24px; }
+  @media (max-width: 720px) {
+    .fq-hero-inner { padding-top: 64px; padding-bottom: 56px; }
+    .fq-main { gap: 32px; }
+    .accordion { flex-basis: 100%; }
+    .acc-q { padding: 18px 20px; font-size: 16px; }
+    .acc-a p { padding: 0 20px 20px; }
+  }
+</style>

@@ -1,0 +1,37 @@
+{
+  "_note": "Placeholders until VP Research confirms winners, themes and publication consent. Each abstract gets its own page at /archive/2021/<slug>. Keep slugs short, lowercase and unique within the year; do not change a slug once published (authors link to it).",
+  "year": "2021",
+  "theme": "Consensus on POCUS in Canadian UGME",
+  "themePlaceholder": false,
+  "winners": [
+    {
+      "place": 1,
+      "placeholder": true,
+      "title": "[Project title]",
+      "team": "[Team · School]"
+    },
+    {
+      "place": 2,
+      "placeholder": true,
+      "title": "[Project title]",
+      "team": "[Team · School]"
+    },
+    {
+      "place": 3,
+      "placeholder": true,
+      "title": "[Project title]",
+      "team": "[Team · School]"
+    }
+  ],
+  "abstracts": [
+    {
+      "slug": "project-1",
+      "placeholder": true,
+      "title": "[Project title]",
+      "authors": "[Authors]",
+      "school": "[School]",
+      "abstract": "[Abstract text, up to 350 words. Publish only with the team’s consent from registration.]",
+      "slidesUrl": ""
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+---
+// SCPEC logo (white version: red maple leaf + white probe). Source: ../images/scpec-logo.png.
+// The white artwork needs a dark background, so on the white header the mark sits on a navy tile.
+// Files: src/assets/logo/scpec-mark.png (leaf + probe only) and scpec-logo.png (full lockup with text).
+import { Image } from 'astro:assets';
+import mark from '../assets/logo/scpec-mark.png';
+
+interface Props { size?: number }
+const { size = 44 } = Astro.props;
+const inner = Math.round(size * 0.78);
+---
+<span class="logo-tile" style={`width:${size}px;height:${size}px`}>
+  <Image src={mark} alt="" height={inner} densities={[1, 2, 3]} loading="eager" />
+</span>
+
+<style>
+  .logo-tile {
+    display: inline-flex; align-items: center; justify-content: center; flex: 0 0 auto;
+    background: var(--navy); border-radius: 10px;
+  }
+  .logo-tile :global(img) { width: auto; flex: 0 0 auto; }
+</style>

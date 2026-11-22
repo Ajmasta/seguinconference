@@ -1,0 +1,67 @@
+---
+import Base from '../../../layouts/Base.astro';
+import site from '../../../content/en/site.json';
+import { years, type Abstract, type Year } from '../../../lib/archive';
+import { url } from '../../../lib/url';
+
+// One page per abstract, e.g. /archive/2025/project-1, so authors can link it on a CV.
+export function getStaticPaths() {
+  return years.flatMap((y) =>
+    y.abstracts.map((a) => ({ params: { year: y.year, slug: a.slug }, props: { y, a } })),
+  );
+}
+interface Props { y: Year; a: Abstract }
+const { y, a } = Astro.props;
+const pageTitle = a.placeholder ? `Abstract (placeholder) · SCPEC ${y.year}` : `${a.title} · SCPEC ${y.year}`;
+const cite = `${a.authors}. ${a.title}. Séguin Canadian POCUS Education Conference (SCPEC) ${y.year}, case competition abstract.`;
+---
+<Base
+  title={pageTitle}
+  description={`Case competition abstract from SCPEC ${y.year}${a.placeholder ? '' : `: ${a.title}, ${a.school}`}.`}
+  current="archive"
+>
+  <section class="abs-hero">
+    <div class="container abs-hero-inner">
+      <a href={url(`/archive#${y.year}`)} class="back">← SCPEC {y.year} abstracts</a>
+      <div class="eyebrow">SCPEC {y.year} · Case competition abstract</div>
+      <h1 class="h2-48" data-placeholder={a.placeholder ? 'abstract-title' : undefined}>{a.title}</h1>
+      <p class="lead">{a.authors} · {a.school}</p>
+      <p class="muted" style="font-size:15px" data-placeholder={y.themePlaceholder ? 'theme' : undefined}>Theme: {y.theme}</p>
+    </div>
+  </section>
+
+  <section class="container section-last" style="padding-top:56px">
+    <div class="abs-layout">
+      <article class="card abs-body" data-placeholder={a.placeholder ? 'abstract-text' : undefined}>
+        <h2 class="head" style="font-size:22px;margin-bottom:16px">Abstract</h2>
+        {a.abstract.split(/\n\n+/).map((para) => <p>{para}</p>)}
+      </article>
+      <aside class="stack" style="gap:16px">
+        <div class="card side">
+          <span class="head" style="font-size:18px">Slides</span>
+          {a.slidesUrl
+            ? <a class="btn btn-primary" href={a.slidesUrl}>Download slides (PDF)</a>
+            : <span class="muted" style="font-size:15px">Slides will be posted here.</span>}
+        </div>
+        <div class="card side">
+          <span class="head" style="font-size:18px">Cite this abstract</span>
+          <span class="muted" style="font-size:14px;line-height:1.55">{cite}</span>
+        </div>
+        <a href={`mailto:${site.email}`} style="font-size:15px;font-weight:600">Questions? Email the team →</a>
+      </aside>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .abs-hero { background: #fff; border-bottom: 1px solid var(--border); }
+  .abs-hero-inner { padding-top: 56px; padding-bottom: 56px; display: flex; flex-direction: column; gap: 16px; max-width: 1200px; }
+  .back { font-weight: 600; font-size: 15px; text-decoration: none; }
+  .abs-layout { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: 24px; align-items: start; }
+  .abs-body { padding: 40px; font-size: 17px; line-height: 1.7; color: var(--grey-dark); display: flex; flex-direction: column; gap: 14px; }
+  .side { padding: 24px; display: flex; flex-direction: column; gap: 12px; align-items: flex-start; }
+  @media (max-width: 860px) {
+    .abs-layout { grid-template-columns: 1fr; }
+    .abs-body { padding: 24px; }
+  }
+</style>

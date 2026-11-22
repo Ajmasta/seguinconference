@@ -1,0 +1,107 @@
+---
+import Base from '../layouts/Base.astro';
+import site from '../content/en/site.json';
+import team from '../content/en/team.json';
+// No photos of people on this page (team request).
+---
+<Base
+  title="Team · SCPEC 2027"
+  description="Meet the medical students and residents from across Canada who organize SCPEC 2027, plus the regional representatives at each school."
+  current="team"
+>
+  <section class="tm-hero on-dark">
+    <div class="container tm-hero-inner">
+      <div class="tm-top">
+        <div class="stack" style="flex:1 1 560px;min-width:0;gap:20px">
+          <div class="eyebrow" style="color:var(--light-blue)">The 2027 team</div>
+          <h1 class="display display-72">Run by students,<br />for students.</h1>
+        </div>
+        <p style="flex:1 1 360px;min-width:0;font-size:18px;line-height:1.6;color:var(--on-dark)">Medical students and residents from schools across Canada plan SCPEC every year, with guidance from a faculty advisor.</p>
+      </div>
+      <ul class="school-pills" role="list" aria-label="Schools on the team">
+        {team.heroSchools.map((s) => <li>{s}</li>)}
+      </ul>
+    </div>
+  </section>
+
+  <section class="container" style="padding-top:72px">
+    <h2 class="h2-32" style="margin-bottom:24px">Leadership</h2>
+    <div class="grid-340">
+      {team.teams.map((t) => (
+        <div class="card group">
+          <div class="stack" style="gap:6px">
+            <h3 class="head" style="font-size:20px">{t.name}</h3>
+            <span class="muted" style="font-size:15px;line-height:1.5">{t.what}</span>
+          </div>
+          <ul class="rows" role="list">
+            {t.members.map((m) => (
+              <li><span style="font-weight:600;font-size:16px">{m.name}</span><span class="muted" style="font-size:14px">{m.detail}</span></li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="reps band">
+    <div class="container" style="padding-top:88px;padding-bottom:88px">
+      <div class="reps-head">
+        <h2 class="h2-32">Regional representatives</h2>
+        <span class="muted" style="font-size:16px">Questions about SCPEC at your school? Ask your rep.</span>
+      </div>
+      <div class="grid-320">
+        {team.regions.map((r) => (
+          <div class="card group" style="gap:12px">
+            <h3 class="head" style="font-size:20px">{r.name}</h3>
+            <ul class="rows" role="list">
+              {r.reps.map((m) => (
+                <li>
+                  <span style="font-size:14px;font-weight:600;color:var(--ink-blue)">{m.school}</span>
+                  <span style={`font-size:15px;color:${m.name ? 'var(--navy)' : 'var(--grey)'}`}>{m.name || 'Open: join us'}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="container section-last" style="padding-top:72px">
+    <div class="grid-340" style="gap:24px">
+      <div class="tile tile--pale">
+        <span class="label" style="color:var(--ink-blue)">Faculty advisor</span>
+        <span class="head" style="font-size:24px">{team.advisor.name}</span>
+        <span style="font-size:16px;color:var(--grey-dark)">{team.advisor.detail}</span>
+      </div>
+      <div class="tile tile--navy on-dark">
+        <span class="head" style="font-size:24px">Join the team</span>
+        <span style="font-size:16px;line-height:1.55;color:var(--on-dark)">We recruit new leaders and school reps each summer. Open spots this year: {team.openSpots}.</span>
+        <a class="btn btn-primary" href={`mailto:${site.email}`} style="align-self:flex-start;padding:12px 20px">Get in touch</a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .tm-hero { background: var(--navy); color: #fff; }
+  .tm-hero-inner { padding-top: 96px; padding-bottom: 80px; display: flex; flex-direction: column; gap: 32px; }
+  .tm-top { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 32px; }
+  .school-pills { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 10px; }
+  .school-pills li { border: 1px solid rgba(255,255,255,0.3); border-radius: 999px; padding: 8px 16px; font-size: 14px; font-weight: 600; }
+  .grid-340 { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(340px, 100%), 1fr)); gap: 16px; }
+  .grid-320 { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr)); gap: 16px; }
+  .group { padding: 28px 32px; display: flex; flex-direction: column; gap: 16px; }
+  .rows { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--border); }
+  .rows li { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; padding: 12px 0; border-bottom: 1px solid var(--border-soft); }
+  .reps { background: var(--pale-blue); }
+  .reps-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 16px; margin-bottom: 24px; }
+  .tile { border-radius: 16px; padding: 40px; display: flex; flex-direction: column; gap: 10px; }
+  .tile--pale { background: var(--pale-blue); }
+  .tile--navy { background: var(--navy); color: #fff; gap: 12px; }
+  @media (max-width: 720px) {
+    .tm-hero-inner { padding-top: 64px; padding-bottom: 56px; }
+    .group { padding: 24px; }
+    .tile { padding: 28px 24px; }
+  }
+</style>

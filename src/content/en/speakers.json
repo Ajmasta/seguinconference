@@ -1,0 +1,25 @@
+{
+  "_note": "Placeholders until speakers and judges confirm (Comms / VP Research). When someone confirms: replace the text, set placeholder to false, and put their headshot file name (stored in src/assets/headshots/) in headshot.",
+  "keynote": {
+    "placeholder": true,
+    "name": "Announced soon",
+    "role": "[Title, specialty and institution]",
+    "bio": "[60-word bio and the keynote's title, once confirmed.]",
+    "time": "1:10–1:40 PM EST",
+    "headshot": ""
+  },
+  "people": [
+    { "placeholder": true, "session": "Workshop A", "name": "[Mentor name]", "role": "[Specialty · Institution]", "headshot": "" },
+    { "placeholder": true, "session": "Workshop A", "name": "[Mentor name]", "role": "[Specialty · Institution]", "headshot": "" },
+    { "placeholder": true, "session": "Workshop A", "name": "[Mentor name]", "role": "[Specialty · Institution]", "headshot": "" },
+    { "placeholder": true, "session": "Workshop B", "name": "[Teaching lead]", "role": "[Residency program · Year]", "headshot": "" }
+  ],
+  "judges": [
+    { "placeholder": true, "name": "[Judge name]", "role": "[Specialty · Institution]" },
+    { "placeholder": true, "name": "[Judge name]", "role": "[Specialty · Institution]" },
+    { "placeholder": true, "name": "[Judge name]", "role": "[Specialty · Institution]" },
+    { "placeholder": true, "name": "[Judge name]", "role": "[Specialty · Institution]" },
+    { "placeholder": true, "name": "[Judge name]", "role": "[Specialty · Institution]" },
+    { "placeholder": true, "name": "[Judge name]", "role": "[Specialty · Institution]" }
+  ]
+}

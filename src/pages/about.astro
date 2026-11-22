@@ -1,0 +1,182 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import site from '../content/en/site.json';
+import team from '../content/en/team.json';
+import { url } from '../lib/url';
+import linearProbe from '../assets/images/linear-probe.jpg';
+
+// No photos of people on this page (team request).
+const names = (k: string) => team.teams.find((t) => t.name === k)?.members.map((m) => m.name) ?? [];
+const chairs = [...names('Chairs'), ...names('Vice-Chairs')];
+const repSchools = team.regions.flatMap((r) => r.reps.filter((x) => x.name).map((x) => x.school));
+
+const history = [
+  { year: '2021', title: 'First conference', text: 'Delegations from 14 of 17 schools agree on 14 curriculum recommendations.' },
+  { year: '2023', title: 'Recommendations published', text: 'The consensus appears in POCUS Journal.' },
+  { year: '2024', title: 'Findings presented', text: 'Conference results shared at national meetings; manuscript underway.' },
+  { year: '2025', title: 'Grant competition', text: '154 attendees; winning teams funded to run their projects.' },
+  { year: '2027', title: 'Reflect, Refine, Redesign', text: 'January 9, online. You are invited.', current: true },
+];
+---
+<Base
+  title="About SCPEC · Séguin Canadian POCUS Education Conference"
+  description="SCPEC is a student-led national conference, founded in 2021, that brings Canadian medical students, residents and POCUS educators together to improve how ultrasound is taught."
+  current="about"
+>
+  <section class="page-hero">
+    <div class="container hero-inner">
+      <div class="stack" style="flex:1 1 560px;min-width:0;gap:20px">
+        <div class="eyebrow">About SCPEC</div>
+        <h1 class="display">Student-led.<br />National.<br /><span class="blue">Since 2021.</span></h1>
+      </div>
+      <div class="stack" style="flex:1 1 360px;min-width:0;gap:20px">
+        <p class="lead">Each year, medical students, residents and staff physicians from across Canada come together to improve how POCUS is taught in medical school.</p>
+        <div class="attend-card">
+          <span class="head" style="font-weight:800;font-size:26px">154 attendees in 2025</span>
+          <span style="font-size:15px;color:var(--grey-dark)">Our largest edition yet.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="container why">
+    <div style="flex:1 1 340px;min-width:0">
+      <h2 class="h2-40">Why SCPEC exists</h2>
+      <Image src={linearProbe} alt="A linear ultrasound probe resting in its holder" class="why-img" widths={[400, 700, 1000]} sizes="(max-width: 960px) 100vw, 380px" />
+    </div>
+    <div class="why-text">
+      <p>Point-of-care ultrasound is now part of everyday care in emergency, internal medicine, anesthesia and family medicine. Yet how much POCUS a student learns still depends on which school they attend.</p>
+      <p>SCPEC brings students, residents and POCUS educators from every Canadian school into one room each year to compare notes, share what works and build a common direction for undergraduate POCUS teaching.</p>
+      <div class="pillars">
+        <div class="card pillar"><span class="icon-tile"><Icon name="users" /></span><span class="head" style="font-size:18px">Connect</span><span class="muted" style="font-size:15px;line-height:1.5">Link POCUS interest groups across all 17 schools.</span></div>
+        <div class="card pillar"><span class="icon-tile"><Icon name="bulb" /></span><span class="head" style="font-size:18px">Improve</span><span class="muted" style="font-size:15px;line-height:1.5">Turn student ideas into real curriculum projects.</span></div>
+        <div class="card pillar"><span class="icon-tile"><Icon name="book" /></span><span class="head" style="font-size:18px">Publish</span><span class="muted" style="font-size:15px;line-height:1.5">Share what we learn as evidence for other schools.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="stat-band on-dark band">
+    <div class="container stat-inner">
+      <span class="big-stat">87%</span>
+      <p class="head" style="flex:1 1 420px;font-size:clamp(22px,2.4vw,28px);line-height:1.3">of participants at the first SCPEC agreed to adopt its 14 recommendations for POCUS in Canadian medical schools.</p>
+    </div>
+  </section>
+
+  <section class="container" style="padding-top:96px">
+    <div class="card tribute pad-56">
+      <div class="stack" style="flex:1 1 480px;min-width:0;gap:16px">
+        <div class="eyebrow">In memory of Ryan Séguin</div>
+        <h2 class="h2-36">A champion of bedside ultrasound teaching.</h2>
+        <p class="lead" style="line-height:1.65" data-placeholder="tribute-draft">Ryan Séguin (uOttawa MD 2021) was remembered by classmates and teachers as caring, positive and always ready to help others learn. As a leader of the uOttawa POCUS interest group, he organized ultrasound workshops for his fellow students. SCPEC was founded in his name to carry that work to every medical school in Canada.</p>
+        <a href="https://uottawa.ca/faculty-medicine/news/memoriam-ryan-seguin" style="font-weight:600">Read the University of Ottawa tribute →</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="history on-dark band">
+    <div class="container" style="padding-top:88px;padding-bottom:88px">
+      <h2 class="h2-40" style="margin-bottom:40px">Our history</h2>
+      <ol class="timeline" style="grid-template-columns:repeat(auto-fit,minmax(200px,1fr))">
+        {history.map((h) => (
+          <li>
+            <span class="head" style={`font-weight:800;font-size:32px;color:${h.current ? '#FFFFFF' : 'var(--light-blue)'}`}>{h.year}</span>
+            <span style="font-weight:600">{h.title}</span>
+            <span style="font-size:15px;line-height:1.5;color:var(--on-dark)">{h.text}</span>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section class="runs band">
+    <div class="container" style="padding-top:88px;padding-bottom:88px">
+      <div class="runs-head">
+        <div class="stack" style="gap:12px">
+          <div class="eyebrow">Who runs SCPEC</div>
+          <h2 class="h2-40">A student team from coast to coast.</h2>
+        </div>
+        <a href={url('/team')} style="font-weight:600">Full team and regional reps →</a>
+      </div>
+      <div class="runs-grid">
+        <div class="role role--navy on-dark">
+          <span class="icon-tile"><Icon name="star" /></span>
+          <span class="head" style="font-size:22px">Chairs &amp; Vice-Chairs</span>
+          <span style="font-size:15px;line-height:1.55;color:var(--on-dark)">Lead the conference, set the program and run conference day.</span>
+          <span style="font-size:15px;line-height:1.7">{chairs.slice(0, 2).join(' · ')}<br />{chairs.slice(2).join(' · ')}</span>
+        </div>
+        <div class="role card">
+          <span class="icon-tile"><Icon name="megaphone" /></span>
+          <span class="head" style="font-size:22px">Communications</span>
+          <span class="muted" style="font-size:15px;line-height:1.55">Promotion, speaker outreach, registration and this website.</span>
+          <span style="font-size:15px;line-height:1.7">{names('Communications').join(' · ')}</span>
+        </div>
+        <div class="role card">
+          <span class="icon-tile"><Icon name="chart" /></span>
+          <span class="head" style="font-size:22px">Research</span>
+          <span class="muted" style="font-size:15px;line-height:1.55">The case competition, judging and conference evaluation.</span>
+          <span style="font-size:15px;line-height:1.7">{names('Research').join(' · ')}</span>
+        </div>
+        <div class="role card">
+          <span class="icon-tile"><Icon name="money" /></span>
+          <span class="head" style="font-size:22px">Finance</span>
+          <span class="muted" style="font-size:15px;line-height:1.55">Budget, sponsors and grants for winning projects.</span>
+          <span style="font-size:15px;line-height:1.7">{names('Finance').join(' · ')}</span>
+        </div>
+        <div class="role card">
+          <span class="icon-tile"><Icon name="pin" /></span>
+          <span class="head" style="font-size:22px">Regional representatives</span>
+          <span class="muted" style="font-size:15px;line-height:1.55">Bring SCPEC to students at their own medical school.</span>
+          <span style="font-size:15px;line-height:1.7">Reps at {repSchools.slice(0, -1).join(', ')} and {repSchools.at(-1)}</span>
+        </div>
+        <div class="role role--blue on-dark">
+          <span class="icon-tile icon-tile--white"><Icon name="book" /></span>
+          <span class="head" style="font-size:22px">Faculty advisor</span>
+          <span style="font-size:15px;line-height:1.55;color:var(--on-dark-2)">Guides the team and reviews the competition.</span>
+          <span style="font-size:15px;line-height:1.7">{team.advisor.name}, {team.advisor.detail}</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="container section-last" style="padding-top:96px">
+    <h2 class="h2-40" style="margin-bottom:32px">Publications</h2>
+    <a class="card card-link pub" href={site.consensusPaperUrl}>
+      <span class="stack" style="gap:8px;max-width:760px">
+        <span class="label">POCUS Journal · 2023 · Vol. 8, No. 1</span>
+        <span class="head" style="font-size:clamp(18px,2vw,22px);line-height:1.35">Recommendations for POCUS Curriculum in Canadian Undergraduate Medical Education: Consensus from the Inaugural Seguin Canadian POCUS Education Conference</span>
+        <span class="muted" style="font-size:15px">Weill S, Picard D, Kim D, Woo M</span>
+      </span>
+      <span class="blue" style="font-weight:600">Read the paper →</span>
+    </a>
+  </section>
+</Base>
+
+<style>
+  .page-hero { background: #fff; border-bottom: 1px solid var(--border); }
+  .hero-inner { padding-top: 96px; padding-bottom: 88px; display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 40px; }
+  .attend-card { background: var(--pale-blue); border-radius: 16px; padding: 24px 28px; display: flex; flex-direction: column; gap: 6px; }
+  .why { padding-top: 96px; display: flex; flex-wrap: wrap; gap: 64px; }
+  .why :global(.why-img) { display: block; width: 100%; height: 300px; object-fit: cover; border-radius: 20px; margin-top: 28px; }
+  .why-text { flex: 2 1 560px; min-width: 0; display: flex; flex-direction: column; gap: 20px; font-size: 18px; line-height: 1.65; color: var(--grey-dark); }
+  .pillars { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; padding-top: 12px; }
+  .pillar { border-radius: 12px; padding: 24px; display: flex; flex-direction: column; gap: 8px; color: var(--navy); }
+  .stat-band { background: var(--blue); color: #fff; }
+  .stat-inner { padding-top: 72px; padding-bottom: 72px; display: flex; flex-wrap: wrap; align-items: center; gap: 32px 64px; }
+  .big-stat { font-family: var(--font-head); font-weight: 800; font-size: clamp(80px, 9vw, 120px); line-height: 0.9; }
+  .tribute { border-radius: 24px; padding: 56px; display: flex; flex-wrap: wrap; gap: 48px; align-items: center; }
+  .history { background: var(--navy); color: #fff; }
+  .runs { background: var(--pale-blue); }
+  .runs-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 16px; margin-bottom: 32px; }
+  .runs-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(340px, 100%), 1fr)); gap: 16px; }
+  .role { border-radius: 16px; padding: 32px; display: flex; flex-direction: column; gap: 14px; }
+  .role--navy { background: var(--navy); color: #fff; }
+  .role--blue { background: var(--blue); color: #fff; }
+  .pub { padding: 32px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 16px; }
+  @media (max-width: 720px) {
+    .hero-inner { padding-top: 64px; padding-bottom: 56px; }
+    .why { padding-top: 72px; gap: 32px; }
+    .why-text { font-size: 17px; }
+  }
+</style>

@@ -1,0 +1,188 @@
+---
+import Base from '../../layouts/Base.astro';
+import updates from '../../content/en/updates.json';
+import { years, defaultYear, placeLabel } from '../../lib/archive';
+import { url } from '../../lib/url';
+---
+<Base
+  title="Abstracts & Archive · SCPEC"
+  description="Abstracts and slides from SCPEC case competition teams, the winners from each year, and how their POCUS education projects turned out."
+  current="archive"
+>
+  <section class="ar-hero">
+    <div class="container ar-hero-inner">
+      <div class="stack" style="flex:1 1 560px;min-width:0;gap:20px">
+        <div class="eyebrow">Abstracts &amp; archive</div>
+        <h1 class="display display-80">Every idea,<br /><span class="blue">on the record.</span></h1>
+      </div>
+      <p class="lead" style="flex:1 1 360px;min-width:0">Abstracts and slides from every case competition team that agreed to share them, plus the winners and how their projects turned out.</p>
+    </div>
+  </section>
+
+  <section class="container" style="padding-top:56px">
+    <div class="controls">
+      <div class="segmented" role="group" aria-label="Year">
+        {years.map((y) => (
+          <button type="button" data-year-btn={y.year} aria-pressed={y.year === defaultYear ? 'true' : 'false'}>{y.year}</button>
+        ))}
+      </div>
+      <div class="stack" style="gap:6px">
+        <label for="abs-search" style="font-size:13px;font-weight:600;color:var(--grey)">Search by title, school or author</label>
+        <input id="abs-search" type="search" placeholder="e.g. peer-led bootcamp" autocomplete="off" />
+      </div>
+    </div>
+  </section>
+
+  {years.map((y) => (
+    <div class:list={['year-panel', { 'is-active': y.year === defaultYear }]} data-year-panel={y.year}>
+      <section class="container" style="padding-top:40px">
+        <div class="card winners-card">
+          <div class="winners-head">
+            <h2 class="head" style="font-weight:800;font-size:28px">SCPEC {y.year}</h2>
+            <span class="muted" style="font-size:15px" data-placeholder={y.themePlaceholder ? 'theme' : undefined}>Theme: {y.theme}</span>
+          </div>
+          {y.winners.length > 0 ? (
+            <div class="winners">
+              {y.winners.map((w) => (
+                <div class:list={['winner', { 'winner--first on-dark': w.place === 1 }]} data-placeholder={w.placeholder ? 'winner' : undefined}>
+                  <span class="win-place">{placeLabel(w.place)}</span>
+                  <span class="head" style="font-size:18px">{w.title}</span>
+                  <span class="win-team">{w.team}</span>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p class="muted" style="font-size:16px">Winners are announced at the closing on January 9, {y.year}.</p>
+          )}
+        </div>
+      </section>
+
+      <section class="container" style="padding-top:48px">
+        <h2 class="head" style="font-weight:800;font-size:28px;margin-bottom:20px">All abstracts <span class="visually-hidden">from {y.year}</span></h2>
+        <ul class="abs-list" role="list">
+          {y.abstracts.map((a) => (
+            <li data-search={`${a.title} ${a.school} ${a.authors}`.toLowerCase()}>
+              <a class="abs card-link" href={url(`/archive/${y.year}/${a.slug}`)} data-placeholder={a.placeholder ? 'abstract' : undefined}>
+                <span class="abs-main">
+                  <span class="head" style="font-size:18px">{a.title}</span>
+                  <span class="muted" style="font-size:14px">{a.authors} · {a.school} · SCPEC {y.year}</span>
+                </span>
+                <span class="flex-wrap" style="gap:8px">
+                  <span class="tag">Abstract</span>
+                  {a.slidesUrl !== undefined && <span class="tag">Slides (PDF)</span>}
+                </span>
+              </a>
+            </li>
+          ))}
+          {y.abstracts.length === 0 && (
+            <li class="abs abs--empty">
+              <span class="abs-main">
+                <span class="head" style="font-size:18px">{y.emptyTitle ?? 'No abstracts yet'}</span>
+                <span class="muted" style="font-size:14px">{y.emptyMeta ?? ''}</span>
+              </span>
+            </li>
+          )}
+        </ul>
+        <p class="no-results muted" hidden>No abstracts from {y.year} match your search.</p>
+      </section>
+    </div>
+  ))}
+  <p class="visually-hidden" aria-live="polite" id="ar-status"></p>
+
+  <section class="now-band band">
+    <div class="container" style="padding-top:88px;padding-bottom:88px">
+      <div class="now pad-56">
+        <div class="stack" style="flex:1 1 340px;min-width:0;gap:12px">
+          <div class="eyebrow">Where are they now</div>
+          <h2 class="h2-36">From pitch to practice.</h2>
+          <p class="muted" style="font-size:16px;line-height:1.6">Winning teams receive support to run their projects. Each spring we share how they went.</p>
+        </div>
+        <div class="stack" style="flex:1 1 480px;min-width:0;gap:16px">
+          {updates.items.map((u) => (
+            <div class="update" data-placeholder={u.placeholder ? 'update' : undefined}>
+              <span class="head" style="font-size:18px">{u.title}</span>
+              <span class="muted" style="font-size:15px;line-height:1.55">{u.text}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<script>
+  // Year filter + search. Without JavaScript every year is shown.
+  const buttons = document.querySelectorAll<HTMLButtonElement>('[data-year-btn]');
+  const panels = document.querySelectorAll<HTMLElement>('[data-year-panel]');
+  const input = document.getElementById('abs-search') as HTMLInputElement | null;
+  const status = document.getElementById('ar-status');
+  let current = document.querySelector<HTMLElement>('[data-year-panel].is-active')?.dataset.yearPanel ?? '';
+
+  const filter = () => {
+    const q = (input?.value ?? '').trim().toLowerCase();
+    const panel = document.querySelector<HTMLElement>(`[data-year-panel="${current}"]`);
+    if (!panel) return;
+    const items = panel.querySelectorAll<HTMLElement>('li[data-search]');
+    let shown = 0;
+    items.forEach((li) => {
+      const hit = !q || li.dataset.search!.includes(q);
+      li.hidden = !hit;
+      if (hit) shown++;
+    });
+    const none = panel.querySelector<HTMLElement>('.no-results');
+    if (none) none.hidden = !(q && items.length && shown === 0);
+    if (status) status.textContent = q ? `${shown} abstract${shown === 1 ? '' : 's'} from ${current} match` : '';
+  };
+
+  const select = (year: string, updateHash = true) => {
+    if (!document.querySelector(`[data-year-panel="${year}"]`)) return;
+    current = year;
+    buttons.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.yearBtn === year)));
+    panels.forEach((p) => p.classList.toggle('is-active', p.dataset.yearPanel === year));
+    if (updateHash) history.replaceState(null, '', `#${year}`);
+    filter();
+  };
+
+  buttons.forEach((b) => b.addEventListener('click', () => select(b.dataset.yearBtn!)));
+  input?.addEventListener('input', filter);
+  const fromHash = location.hash.slice(1);
+  if (fromHash) select(fromHash, false);
+</script>
+
+<style>
+  .ar-hero { background: #fff; border-bottom: 1px solid var(--border); }
+  .ar-hero-inner { padding-top: 96px; padding-bottom: 88px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 40px; }
+  .controls { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px; }
+  #abs-search {
+    width: 320px; max-width: 100%; min-height: 44px; padding: 10px 14px; border: 1px solid var(--input-border);
+    border-radius: 8px; font: 15px var(--font-body); color: var(--navy); background: #fff;
+  }
+  :global(.js) .year-panel:not(.is-active) { display: none; }
+  .winners-card { padding: 36px; display: flex; flex-direction: column; gap: 24px; }
+  .winners-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 12px; }
+  .winners { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+  .winner { background: var(--pale-blue); border-radius: 12px; padding: 24px; display: flex; flex-direction: column; gap: 6px; }
+  .win-place { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-blue); }
+  .win-team { font-size: 14px; color: var(--grey); }
+  .winner--first { background: var(--navy); color: #fff; }
+  .winner--first .win-place { color: var(--light-blue); }
+  .winner--first .win-team { color: var(--on-dark); }
+  .abs-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+  .abs {
+    background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 24px 28px;
+    display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 16px; color: var(--navy);
+  }
+  .abs-main { flex: 1 1 520px; min-width: 0; display: flex; flex-direction: column; gap: 6px; }
+  .no-results { margin-top: 16px; font-size: 15px; }
+  .now-band { background: var(--navy); }
+  .now { display: flex; flex-wrap: wrap; gap: 48px; background: #fff; border: 1px solid var(--border); border-radius: 24px; padding: 56px; }
+  .update { border-top: 1px solid var(--border); padding-top: 16px; display: flex; flex-direction: column; gap: 6px; }
+  @media (max-width: 720px) {
+    .ar-hero-inner { padding-top: 64px; padding-bottom: 56px; }
+    .winners-card { padding: 24px; }
+    .abs { padding: 20px; }
+    .abs-main { flex-basis: 100%; }
+    #abs-search { width: 100%; }
+    .controls > .stack { width: 100%; }
+  }
+</style>

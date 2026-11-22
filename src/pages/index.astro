@@ -1,0 +1,303 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import site from '../content/en/site.json';
+import { url } from '../lib/url';
+import heroBeam from '../assets/images/hero-beam.jpg';
+import shoulderScan from '../assets/images/shoulder-scan.jpg';
+import trackball from '../assets/images/trackball.jpg';
+import ultrasoundHands from '../assets/images/ultrasound-hands.jpg';
+
+const programCards = [
+  { n: '01', title: 'Keynote', text: 'An opening talk on the future of POCUS education in Canada.', href: '/program' },
+  { n: '02', title: 'Case competition', text: 'Student teams pitch a plan to improve POCUS teaching at their school.', href: '/case-competition' },
+  { n: '03', title: 'Workshop A · Mentorship', text: 'A speed round of small-group Q&As with Canadian POCUS leaders.', href: '/program' },
+  { n: '04', title: 'Workshop B · Scanning', text: 'Virtual teaching on the high-yield POCUS scans every student should know.', href: '/program' },
+];
+const regPh = site.registerUrlIsPlaceholder ? 'register-link' : undefined;
+---
+<Base
+  title="SCPEC 2027 · Séguin Canadian POCUS Education Conference"
+  description="A free, student-led national conference on how point-of-care ultrasound is taught in Canadian medical schools. Saturday, January 9, 2027, 1–4 PM EST on Zoom."
+  footer="full"
+>
+  <!-- Hero -->
+  <section class="hero on-dark">
+    <div class="hero-beam" aria-hidden="true">
+      <Image src={heroBeam} alt="" height={920} width={1766} widths={[1766, 2880]} sizes="1766px" loading="eager" fetchpriority="high" format="webp" />
+    </div>
+    <div class="hero-shade" aria-hidden="true"></div>
+    <div class="container-wide hero-copy">
+      <div class="live-pill"><span class="live-dot"></span>Registration open</div>
+      <h1>SCPEC<br />2027</h1>
+      <p class="hero-sub">{site.fullName}</p>
+      <p class="hero-text">A free, student-led national conference on how point-of-care ultrasound is taught in Canadian medical schools.</p>
+      <div class="flex-wrap" style="gap:12px;padding-top:4px">
+        <a class="btn btn-primary btn-lg" href={site.registerUrl} data-placeholder={regPh}>Register for free</a>
+        <a class="btn btn-ghost btn-lg" href={url('/case-competition')} style="font-weight:600">Enter the case competition</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Date band + countdown -->
+  <section class="date-band on-dark">
+    <div class="container-wide date-inner">
+      <span class="date-day">09 JAN</span>
+      <span class="date-meta">
+        <span>Saturday · 1–4 PM EST</span>
+        <span style="color:var(--light-blue)">Free · On Zoom</span>
+      </span>
+      <span class="date-rule" aria-hidden="true"></span>
+      <span class="stack" style="gap:6px">
+        <span class="cd-label" id="cd-label">Starts in</span>
+        <span class="countdown" data-countdown={site.eventStartUtc} data-end={site.eventEndUtc} role="timer" aria-labelledby="cd-label">
+          <span><span data-cd="d">–</span><span class="cd-unit"> days</span></span>
+          <span><span data-cd="h">–</span><span class="cd-unit"> hrs</span></span>
+          <span><span data-cd="m">–</span><span class="cd-unit"> min</span></span>
+        </span>
+      </span>
+      <a class="tz-link" href="https://www.timeanddate.com/worldclock/converter.html">Convert to my time zone →</a>
+    </div>
+  </section>
+
+  <!-- School marquee -->
+  <section class="marquee-band" aria-label="Schools across Canada">
+    <ul class="marquee" role="list">
+      {site.schools.map((s) => <li>{s}</li>)}
+      {site.schools.map((s) => <li aria-hidden="true">{s}</li>)}
+    </ul>
+  </section>
+
+  <!-- Program cards -->
+  <section class="container section">
+    <div class="section-head">
+      <div class="stack" style="gap:12px">
+        <div class="eyebrow">The program</div>
+        <h2 class="h2-48">What to expect on January 9.</h2>
+      </div>
+      <a href={url('/program')} style="font-weight:600;font-size:16px">Full agenda →</a>
+    </div>
+    <div class="program-grid">
+      {programCards.map((c) => (
+        <a class="card card-link program-card" href={url(c.href)}>
+          <span class="head blue" style="font-size:16px">{c.n}</span>
+          <span class="head" style="font-size:22px">{c.title}</span>
+          <span class="muted" style="font-size:16px;line-height:1.55">{c.text}</span>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <!-- Photo mosaic -->
+  <section class="container" style="padding-top:72px">
+    <div class="mosaic">
+      <Image class="mosaic-big" src={shoulderScan} alt="A handheld ultrasound probe scanning a shoulder, with the image on a tablet" widths={[600, 900, 1200]} sizes="(max-width: 720px) 100vw, 760px" />
+      <Image class="mosaic-small" src={trackball} alt="A hand on an ultrasound machine's trackball and controls" widths={[400, 700]} sizes="(max-width: 720px) 100vw, 380px" />
+      <div class="mosaic-cta on-dark">
+        <span class="head" style="font-weight:800;font-size:26px;line-height:1.15">Learn it. Teach it. Bring it home to your school.</span>
+        <a href={url('/program')}>See the program →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Why SCPEC + stats -->
+  <section class="container section">
+    <div class="why">
+      <Image class="why-img" src={ultrasoundHands} alt="Gloved hands holding an ultrasound probe at the machine's control panel" widths={[500, 800, 1100]} sizes="(max-width: 960px) 100vw, 560px" />
+      <div class="why-copy">
+        <div class="stack" style="gap:12px">
+          <div class="eyebrow">Why SCPEC</div>
+          <h2 class="h2-44">Every Canadian med student should graduate ready to scan.</h2>
+        </div>
+        <div class="stats">
+          <div class="stat"><span class="stat-n">2021</span><span class="stat-t">Founded by University of Ottawa medical students</span></div>
+          <div class="stat"><span class="stat-n">14<span class="stat-of"> / 17</span></span><span class="stat-t">Canadian medical schools at the first conference</span></div>
+          <div class="stat"><span class="stat-n">14</span><span class="stat-t">Curriculum recommendations, <a href={site.consensusPaperUrl}>published in POCUS Journal</a></span></div>
+          <div class="stat"><span class="stat-n blue">154</span><span class="stat-t">Attendees in 2025, our largest edition yet</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Case competition teaser -->
+  <section class="container section">
+    <div class="cc-teaser">
+      <div class="cc-left pad-56">
+        <div class="eyebrow">Case competition 2027</div>
+        <h2 class="h2-48" style="text-transform:uppercase">Your idea.<br /><span class="blue">Better POCUS education.</span></h2>
+        <p class="muted" style="font-size:18px;line-height:1.55">Teams of 1 to 4 students look hard at POCUS teaching at their own school and pitch a plan to make it better.</p>
+      </div>
+      <div class="cc-right on-dark pad-56">
+        <div class="stack" style="gap:12px">
+          <span class="label" style="color:var(--light-blue);letter-spacing:0.1em">2027 theme</span>
+          <span class="head" style="font-size:26px;line-height:1.3">{site.theme}</span>
+        </div>
+        <a class="btn btn-primary" href={url('/case-competition')} style="align-self:flex-start">Read the rules</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Tribute (draft wording, Chairs to confirm) -->
+  <section class="container section" data-placeholder="tribute-draft">
+    <div class="tribute">
+      <div class="stack" style="flex:1 1 420px;min-width:0;gap:16px">
+        <div class="eyebrow">In memory</div>
+        <h2 class="h2-40">Why the conference carries Ryan Séguin's name.</h2>
+      </div>
+      <div class="stack" style="flex:1 1 520px;min-width:0;gap:16px">
+        <p class="muted" style="font-size:18px;line-height:1.6">Ryan Séguin was a University of Ottawa medical student who championed bedside ultrasound and helped lead his school's POCUS interest group. SCPEC continues the work he cared about: helping every Canadian medical student learn POCUS.</p>
+        <a href={url('/about')} style="font-weight:600">Our story →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Speakers soon -->
+  <section class="container section">
+    <div class="soon pad-56">
+      <div class="stack" style="gap:8px">
+        <span class="head" style="font-size:28px">Speakers announced soon</span>
+        <span class="muted" style="font-size:16px">Follow {site.instagramHandle} on Instagram for the line-up.</span>
+      </div>
+      <a class="btn btn-outline" href={site.instagram}>Follow on Instagram</a>
+    </div>
+  </section>
+
+  <!-- Register CTA -->
+  <section class="container section section-last">
+    <div class="cta on-dark pad-56">
+      <div class="stack" style="gap:12px;max-width:640px">
+        <h2 style="font-size:clamp(38px,4.8vw,56px);line-height:1">Join us January 9.</h2>
+        <p style="font-size:18px;line-height:1.55;color:var(--on-blue)">Free for all Canadian medical students. Registration closes {site.registrationCloses}.</p>
+      </div>
+      <a class="btn btn-white btn-lg" href={site.registerUrl} data-placeholder={regPh} style="padding:18px 32px;border-radius:8px">Register for free</a>
+    </div>
+  </section>
+</Base>
+
+<script>
+  // Live countdown to the conference start. Refreshes every 30 seconds.
+  const el = document.querySelector<HTMLElement>('[data-countdown]');
+  if (el) {
+    const start = Date.parse(el.dataset.countdown!);
+    const end = Date.parse(el.dataset.end!);
+    const label = document.getElementById('cd-label');
+    const set = (k: string, v: number) => {
+      const node = el.querySelector(`[data-cd="${k}"]`);
+      if (node) node.textContent = String(v);
+    };
+    const tick = () => {
+      const now = Date.now();
+      const ms = Math.max(0, start - now);
+      set('d', Math.floor(ms / 86400000));
+      set('h', Math.floor((ms % 86400000) / 3600000));
+      set('m', Math.floor((ms % 3600000) / 60000));
+      if (label) label.textContent = now >= end ? 'Thanks for joining' : now >= start ? 'Happening now' : 'Starts in';
+    };
+    tick();
+    setInterval(tick, 30000);
+  }
+</script>
+
+<style>
+  /* Hero: beam image anchored top-right, shifted -190px X / -130px Y as in the design. */
+  .hero { display: grid; grid-template-columns: minmax(0, 1fr); color: #fff; overflow: hidden; background-color: var(--hero-navy); }
+  .hero-beam {
+    grid-area: 1 / 1; z-index: 0; height: 0; min-width: 0; display: flex; justify-content: flex-end;
+    transform: translate(-190px, -130px); transform-origin: top right;
+  }
+  .hero-beam :global(img) { display: block; height: 920px; width: auto; max-width: none; margin-right: -200px; }
+  .hero-shade {
+    grid-area: 1 / 1; z-index: 1; pointer-events: none;
+    background: linear-gradient(90deg, rgba(6,18,38,0.92) 0%, rgba(6,18,38,0.6) 34%, rgba(6,18,38,0) 62%);
+  }
+  .hero-copy {
+    grid-area: 1 / 1; z-index: 2; width: 100%; padding-top: 120px; padding-bottom: 112px;
+    display: flex; flex-direction: column; gap: 28px;
+  }
+  .live-pill {
+    align-self: flex-start; display: flex; align-items: center; gap: 10px;
+    background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18); border-radius: 999px;
+    padding: 8px 16px 8px 12px; font-size: 14px; font-weight: 600; letter-spacing: 0.06em;
+    text-transform: uppercase; color: var(--on-blue);
+  }
+  .live-dot { width: 8px; height: 8px; border-radius: 999px; background: var(--live-red); animation: pulse 1.6s ease-in-out infinite; }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
+  .hero h1 { font-size: clamp(76px, 12vw, 152px); line-height: 0.88; letter-spacing: -0.03em; }
+  .hero-sub { font-family: var(--font-head); font-weight: 700; font-size: clamp(24px, 2.6vw, 34px); line-height: 1.2; max-width: 640px; }
+  .hero-text { font-size: 19px; line-height: 1.55; color: var(--on-dark); max-width: 520px; }
+
+  @media (max-width: 720px) {
+    .hero-copy { padding-top: 72px; padding-bottom: 72px; gap: 22px; }
+    .hero-shade { background: linear-gradient(90deg, rgba(6,18,38,0.92) 0%, rgba(6,18,38,0.7) 55%, rgba(6,18,38,0.25) 100%); }
+    .hero-text { font-size: 17px; }
+    .hero .btn-lg { width: 100%; }
+  }
+
+  .date-band { background: var(--band-navy); color: #fff; border-top: 1px solid rgba(255,255,255,0.08); }
+  .date-inner { padding-top: 32px; padding-bottom: 32px; display: flex; flex-wrap: wrap; align-items: center; gap: 24px 48px; }
+  .date-day { font-family: var(--font-head); font-weight: 800; font-size: clamp(48px, 5vw, 64px); line-height: 1; letter-spacing: -0.01em; }
+  .date-meta { display: flex; flex-direction: column; gap: 4px; font-family: var(--font-head); font-weight: 700; font-size: 18px; line-height: 1.3; text-transform: uppercase; }
+  .date-rule { width: 1px; align-self: stretch; background: rgba(255,255,255,0.15); }
+  .cd-label { font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--light-blue); }
+  .countdown { display: flex; gap: 14px; align-items: baseline; font-family: var(--font-head); font-weight: 800; font-size: 32px; line-height: 1; }
+  .cd-unit { font-size: 14px; font-weight: 600; color: var(--light-blue); }
+  .tz-link { margin-left: auto; color: var(--on-dark); font-size: 15px; font-weight: 600; }
+  .tz-link:hover { color: #fff; }
+  @media (max-width: 720px) {
+    .date-rule { display: none; }
+    .tz-link { margin-left: 0; }
+  }
+
+  .marquee-band { background: var(--navy); border-top: 1px solid rgba(255,255,255,0.08); overflow: hidden; padding: 20px 0; }
+  .marquee {
+    list-style: none; margin: 0; padding: 0; display: flex; gap: 48px; width: max-content;
+    font-family: var(--font-head); font-weight: 700; font-size: 18px; color: var(--light-blue); white-space: nowrap;
+    animation: marquee 40s linear infinite;
+  }
+  .marquee li { margin: 0; }
+  .marquee-band:hover .marquee { animation-play-state: paused; }
+  @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(calc(-50% - 24px)); } }
+  @media (prefers-reduced-motion: reduce) {
+    .marquee { animation: none; flex-wrap: wrap; width: auto; justify-content: center; padding: 0 var(--gutter); gap: 12px 32px; }
+    .marquee li[aria-hidden='true'] { display: none; }
+    .live-dot { animation: none; }
+  }
+
+  .section-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 24px; margin-bottom: 40px; }
+  .program-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px; }
+  .program-card { padding: 32px; display: flex; flex-direction: column; gap: 12px; }
+
+  .mosaic { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); grid-template-rows: 260px 260px; gap: 16px; }
+  .mosaic :global(img) { width: 100%; height: 100%; object-fit: cover; border-radius: 20px; }
+  .mosaic :global(.mosaic-big) { grid-column: span 2; grid-row: span 2; }
+  .mosaic-cta { background: var(--blue); color: #fff; border-radius: 20px; padding: 28px; display: flex; flex-direction: column; justify-content: space-between; gap: 20px; }
+  .mosaic-cta a { color: #fff; font-weight: 600; }
+  @media (max-width: 720px) {
+    .mosaic { grid-template-columns: 1fr; grid-template-rows: none; }
+    .mosaic :global(.mosaic-big) { grid-column: auto; grid-row: auto; height: 280px; }
+    .mosaic :global(.mosaic-small) { height: 220px; }
+  }
+
+  .why { display: flex; flex-wrap: wrap; gap: 56px; align-items: center; }
+  .why :global(.why-img) { flex: 1 1 420px; min-width: 0; width: 100%; height: 560px; object-fit: cover; object-position: 50% 60%; border-radius: 24px; }
+  .why-copy { flex: 1 1 480px; min-width: 0; display: flex; flex-direction: column; gap: 28px; }
+  .stats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 40px 32px; border-top: 2px solid var(--navy); padding-top: 32px; }
+  .stat { display: flex; flex-direction: column; gap: 8px; }
+  .stat-n { font-family: var(--font-head); font-weight: 800; font-size: clamp(40px, 4.6vw, 56px); line-height: 1; }
+  .stat-of { font-size: 0.5em; color: var(--grey); }
+  .stat-t { font-size: 16px; line-height: 1.5; color: var(--grey); }
+  @media (max-width: 720px) {
+    .why { gap: 40px; }
+    .why :global(.why-img) { height: 360px; flex-basis: 100%; }
+    .stats { gap: 28px 20px; }
+  }
+
+  .cc-teaser { border-radius: 24px; overflow: hidden; display: flex; flex-wrap: wrap; }
+  .cc-left { flex: 1 1 480px; min-width: 0; background: #fff; border: 1px solid var(--border); border-right: none; padding: 56px; display: flex; flex-direction: column; gap: 20px; }
+  .cc-right { flex: 1 1 380px; min-width: 0; background: var(--navy); color: #fff; padding: 56px; display: flex; flex-direction: column; justify-content: space-between; gap: 32px; }
+  @media (max-width: 960px) { .cc-left { border-right: 1px solid var(--border); border-bottom: none; } }
+
+  .tribute { display: flex; flex-wrap: wrap; gap: 48px; align-items: center; }
+  .soon { background: var(--pale-blue); border-radius: 24px; padding: 48px 56px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 24px; }
+  .cta { background: var(--blue); color: #fff; border-radius: 24px; padding: 72px 56px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 32px; }
+</style>

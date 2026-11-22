@@ -1,0 +1,170 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import site from '../content/en/site.json';
+import agenda from '../content/en/agenda.json';
+import { url, fmtTime } from '../lib/url';
+import ultrasoundCart from '../assets/images/ultrasound-cart.jpg';
+import cardiacScreen from '../assets/images/cardiac-screen.jpg';
+
+const def = agenda.zones.find((z) => z.id === agenda.defaultZone)!;
+const timeLabel = (s: number, e: number, shift: number, abbr: string) => `${fmtTime(s + shift)}–${fmtTime(e + shift)} ${abbr}`;
+const regPh = site.registerUrlIsPlaceholder ? 'register-link' : undefined;
+---
+<Base
+  title="Program · SCPEC 2027"
+  description="The SCPEC 2027 agenda: keynote, case competition and two workshops on Saturday, January 9, 2027, 1–4 PM EST on Zoom. See times in your own time zone."
+  current="program"
+>
+  <section class="prog-hero on-dark">
+    <div class="container prog-hero-inner">
+      <div class="eyebrow" style="color:var(--on-dark-2)">The program</div>
+      <h1 class="display display-80">Three hours.<br />One afternoon.</h1>
+      <p style="font-size:19px;line-height:1.6;color:var(--on-blue)">Saturday, January 9, 2027 · 1–4 PM EST · Online on Zoom</p>
+      <div class="timebar" aria-label="Afternoon timeline (Eastern time)">
+        {agenda.timeline.map((t) => (
+          <div class="timebar-seg" style={`flex:${t.weight} 1 0`}>
+            <span class="timebar-bar" style={`background:${t.color}`}></span>
+            <span class={t.minor ? 'timebar-minor' : 'timebar-label'}>{t.label}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="container" style="padding-top:72px">
+    <div class="agenda-head">
+      <h2 class="h2-36">Agenda</h2>
+      <div class="segmented" role="group" aria-label="Show times in">
+        {agenda.zones.map((z) => (
+          <button type="button" data-zone={z.id} data-shift={z.shift} data-abbr={z.abbr} aria-pressed={z.id === def.id ? 'true' : 'false'}>{z.label}</button>
+        ))}
+      </div>
+    </div>
+    <div class="card agenda" data-placeholder={agenda.provisional ? 'run-of-show' : undefined}>
+      {agenda.items.map((it) => (
+        <div class="agenda-row">
+          <div class="agenda-time" data-start={it.start} data-end={it.end}>{timeLabel(it.start, it.end, def.shift, def.abbr)}</div>
+          <div class="agenda-body">
+            <span class="head" style="font-size:20px">{it.title}</span>
+            <span class="muted" style="font-size:16px;line-height:1.55">{it.desc}</span>
+          </div>
+          <div style="flex:0 0 auto"><span class="tag">{it.tag}</span></div>
+        </div>
+      ))}
+    </div>
+    <p class="muted" style="margin-top:16px;font-size:14px">
+      {agenda.provisional && 'Times are provisional until the final run-of-show is confirmed. '}Winners of the case competition are announced at the closing.
+      <span class="visually-hidden" aria-live="polite" id="tz-status"></span>
+    </p>
+  </section>
+
+  <section class="container" style="padding-top:96px">
+    <h2 class="h2-36" style="margin-bottom:32px">Choose your workshop</h2>
+    <div class="workshops">
+      <div class="ws ws--navy on-dark">
+        <Image src={ultrasoundCart} alt="A hand on an ultrasound machine next to its screen" class="ws-img" style="object-position:50% 70%" widths={[600, 900]} sizes="(max-width: 720px) 100vw, 590px" />
+        <span class="ws-top"><span class="ws-letter" style="color:var(--light-blue)">A</span><span class="icon-tile icon-tile--glass"><Icon name="chat" /></span></span>
+        <h3 class="head" style="font-size:24px">Mentorship speed round</h3>
+        <span style="font-size:16px;line-height:1.6;color:var(--on-dark-2)">Rotate through short small-group Q&amp;As with Canadian POCUS leaders. Ask about clinical careers, leadership, research and national advocacy.</span>
+        <span style="font-size:14px;font-weight:600">Best for: students planning a POCUS-heavy career</span>
+      </div>
+      <div class="ws ws--blue on-dark">
+        <Image src={cardiacScreen} alt="A cardiac ultrasound image on a portable machine" class="ws-img" widths={[600, 900]} sizes="(max-width: 720px) 100vw, 590px" />
+        <span class="ws-top"><span class="ws-letter" style="color:var(--on-dark-2)">B</span><span class="icon-tile icon-tile--glass" style="background:rgba(255,255,255,0.16)"><Icon name="probe" /></span></span>
+        <h3 class="head" style="font-size:24px">Virtual POCUS teaching</h3>
+        <span style="font-size:16px;line-height:1.6;color:var(--on-dark-2)">A resident-led review of the high-yield scans medical students meet in emergency, internal medicine and beyond, with time for questions.</span>
+        <span style="font-size:14px;font-weight:600">Best for: students who want more scanning knowledge</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="container section-last" style="padding-top:96px">
+    <div class="join on-dark pad-56">
+      <h2 class="h2-36">How to join</h2>
+      <ol class="join-steps">
+        <li><span class="step-n">1</span><span class="step-t">Register by Dec 25</span><span class="step-d">One short form. Pick Workshop A or B.</span></li>
+        <li><span class="step-n">2</span><span class="step-t">Watch your inbox</span><span class="step-d">The Zoom link and a short pre-conference survey arrive by email.</span></li>
+        <li><span class="step-n">3</span><span class="step-t">Add it to your calendar</span><span class="step-d">Saturday, January 9, 1–4 PM EST.</span></li>
+        <li><span class="step-n">4</span><span class="step-t">Join on the day</span><span class="step-d">Log in a few minutes early with your camera ready for breakouts.</span></li>
+      </ol>
+      <div class="flex-wrap" style="gap:12px">
+        <a class="btn btn-primary" href={site.registerUrl} data-placeholder={regPh}>Register for free</a>
+        <a class="btn btn-ghost-soft" href={url('/scpec-2027.ics')} download>Add to calendar (.ics)</a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<script>
+  // Time-zone switcher: shifts every agenda time by the chosen zone's offset from Eastern.
+  const fmt = (mins: number) => {
+    const h = Math.floor(mins / 60), m = mins % 60;
+    const h12 = h > 12 ? h - 12 : h === 0 ? 12 : h;
+    return `${h12}:${m < 10 ? '0' + m : m}`;
+  };
+  const buttons = document.querySelectorAll<HTMLButtonElement>('[data-zone]');
+  const status = document.getElementById('tz-status');
+  const apply = (btn: HTMLButtonElement) => {
+    const shift = Number(btn.dataset.shift);
+    const abbr = btn.dataset.abbr!;
+    buttons.forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
+    document.querySelectorAll<HTMLElement>('.agenda-time').forEach((el) => {
+      const s = Number(el.dataset.start) + shift, e = Number(el.dataset.end) + shift;
+      el.textContent = `${fmt(s)}–${fmt(e)} ${abbr}`;
+    });
+    if (status) status.textContent = `Showing times in ${btn.textContent} time`;
+    try { localStorage.setItem('scpec-zone', btn.dataset.zone!); } catch {}
+  };
+  buttons.forEach((b) => b.addEventListener('click', () => apply(b)));
+  try {
+    const saved = localStorage.getItem('scpec-zone');
+    const btn = saved && document.querySelector<HTMLButtonElement>(`[data-zone="${saved}"]`);
+    if (btn) apply(btn);
+  } catch {}
+</script>
+
+<style>
+  .prog-hero { background: var(--blue); color: #fff; }
+  .prog-hero-inner { padding-top: 96px; padding-bottom: 72px; display: flex; flex-direction: column; gap: 24px; }
+  .timebar { display: flex; gap: 6px; padding-top: 24px; }
+  .timebar-seg { min-width: 0; display: flex; flex-direction: column; gap: 10px; }
+  .timebar-bar { height: 10px; border-radius: 999px; }
+  .timebar-minor { font-size: 13px; font-weight: 600; color: var(--on-blue); }
+  .timebar-label { font-size: 14px; font-weight: 700; }
+  @media (max-width: 720px) {
+    .prog-hero-inner { padding-top: 64px; padding-bottom: 56px; }
+    .timebar { flex-direction: column; gap: 14px; }
+    .timebar-seg { flex: none !important; flex-direction: row; align-items: center; gap: 12px; }
+    .timebar-bar { width: 40px; flex: 0 0 40px; }
+  }
+  .agenda-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 16px; margin-bottom: 24px; }
+  .agenda { overflow: hidden; }
+  .agenda-row { display: flex; flex-wrap: wrap; gap: 24px; padding: 28px 32px; border-bottom: 1px solid var(--border); }
+  .agenda-row:last-child { border-bottom: none; }
+  .agenda-time { flex: 0 0 180px; font-family: var(--font-head); font-weight: 700; font-size: 18px; color: var(--blue); }
+  .agenda-body { flex: 1 1 420px; min-width: 0; display: flex; flex-direction: column; gap: 6px; }
+  @media (max-width: 720px) {
+    .agenda-row { padding: 22px 20px; gap: 10px; flex-direction: column; }
+    .agenda-time { flex: none; }
+    .agenda-body { flex: none; }
+  }
+  .workshops { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr)); gap: 24px; }
+  .ws { border-radius: 16px; padding: 36px; display: flex; flex-direction: column; gap: 14px; color: #fff; }
+  .ws--navy { background: var(--navy); }
+  .ws--blue { background: var(--blue); }
+  .ws :global(.ws-img) { display: block; width: calc(100% + 72px); max-width: none; height: 240px; object-fit: cover; margin: -36px -36px 10px; border-radius: 16px 16px 0 0; }
+  .ws-top { display: flex; justify-content: space-between; align-items: center; }
+  .ws-letter { font-family: var(--font-head); font-weight: 800; font-size: 48px; line-height: 1; }
+  @media (max-width: 720px) {
+    .ws { padding: 24px; }
+    .ws :global(.ws-img) { width: calc(100% + 48px); margin: -24px -24px 10px; height: 200px; }
+  }
+  .join { background: var(--navy); color: #fff; border-radius: 24px; padding: 56px; display: flex; flex-direction: column; gap: 32px; }
+  .join-steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 24px; }
+  .join-steps li { display: flex; flex-direction: column; gap: 8px; }
+  .step-n { font-family: var(--font-head); font-weight: 800; font-size: 28px; color: var(--light-blue); }
+  .step-t { font-weight: 600; font-size: 17px; }
+  .step-d { font-size: 15px; line-height: 1.5; color: var(--on-dark); }
+</style>

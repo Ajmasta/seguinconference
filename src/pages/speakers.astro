@@ -1,0 +1,141 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import Base from '../layouts/Base.astro';
+import site from '../content/en/site.json';
+import speakers from '../content/en/speakers.json';
+
+// Headshots: drop image files in src/assets/headshots/ and put the file name in speakers.json.
+const shots = import.meta.glob<{ default: ImageMetadata }>('../assets/headshots/*.{jpg,jpeg,png,webp}', { eager: true });
+const shot = (file: string) => (file ? shots[`../assets/headshots/${file}`]?.default : undefined);
+const k = speakers.keynote;
+const keyShot = shot(k.headshot);
+---
+<Base
+  title="Speakers & Judges · SCPEC 2027"
+  description="Meet the SCPEC 2027 keynote speaker, workshop mentors and case competition judges: POCUS leaders from across Canada. Line-up announced soon."
+  current="speakers"
+>
+  <section class="sp-hero">
+    <div class="container sp-hero-inner">
+      <div class="stack" style="flex:1 1 560px;min-width:0;gap:20px">
+        <div class="eyebrow">Speakers &amp; judges</div>
+        <h1 class="display display-72">Learn from POCUS<br />leaders across Canada.</h1>
+      </div>
+      <div class="stack" style="flex:0 1 auto;align-items:flex-start;gap:14px">
+        <div class="dots" aria-hidden="true">
+          <span style="background:var(--navy)"></span>
+          <span style="background:var(--blue)"></span>
+          <span style="background:var(--light-blue)"></span>
+          <span class="dot-plus">+</span>
+        </div>
+        <span style="font-weight:600;font-size:15px;color:var(--grey-dark)">Line-up announced soon</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="container" style="padding-top:72px">
+    <h2 class="h2-32" style="margin-bottom:24px">Keynote</h2>
+    <div class="keynote on-dark" data-placeholder={k.placeholder ? 'keynote' : undefined}>
+      <div class="kn-meet">
+        <span class="head" style="font-weight:800;font-size:28px;line-height:1.1;text-transform:uppercase">Meet the<br />speaker</span>
+        <span class="head" style="font-weight:800;font-size:48px;line-height:1">09<br />JAN</span>
+      </div>
+      <div class="kn-photo">
+        {keyShot
+          ? <Image src={keyShot} alt={`Headshot of ${k.name}`} widths={[320, 640]} sizes="320px" />
+          : <span class="shot-tag">[Headshot]</span>}
+      </div>
+      <div class="kn-body">
+        <span class="head" style="font-size:32px">{k.name}</span>
+        <span style="font-size:16px;color:var(--on-dark)">{k.role}</span>
+        <span style="font-size:16px;line-height:1.6;color:var(--on-dark)">{k.bio}</span>
+        <span style="font-size:13px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--light-blue)">{k.time}</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="container" style="padding-top:72px">
+    <h2 class="h2-32" style="margin-bottom:8px">Workshop mentors &amp; teachers</h2>
+    <p class="muted" style="margin-bottom:24px;font-size:16px">Workshop A mentors and the Workshop B lead.</p>
+    <div class="people">
+      {speakers.people.map((p) => {
+        const img = shot(p.headshot);
+        return (
+          <div class="card person" data-placeholder={p.placeholder ? 'speaker' : undefined}>
+            <div class="person-photo">
+              {img ? <Image src={img} alt={`Headshot of ${p.name}`} widths={[300, 600]} sizes="(max-width: 720px) 100vw, 280px" /> : <span class="shot-tag">[Headshot]</span>}
+            </div>
+            <div class="stack" style="padding:24px;gap:6px">
+              <span class="session">{p.session}</span>
+              <span class="head" style="font-size:20px;padding-top:6px">{p.name}</span>
+              <span class="muted" style="font-size:14px">{p.role}</span>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  </section>
+
+  <section class="judges band">
+    <div class="container" style="padding-top:88px;padding-bottom:88px">
+      <h2 class="h2-32" style="margin-bottom:8px">Case competition judges</h2>
+      <p class="muted" style="margin-bottom:24px;font-size:16px">Staff physicians and residents from emergency, internal, family medicine and anesthesia.</p>
+      <div class="judge-grid">
+        {speakers.judges.map((j) => (
+          <div class="card judge" data-placeholder={j.placeholder ? 'judge' : undefined}>
+            <div class="judge-dot" aria-hidden="true"></div>
+            <div class="stack" style="gap:4px;min-width:0">
+              <span class="head" style="font-size:17px">{j.name}</span>
+              <span class="muted" style="font-size:14px">{j.role}</span>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="container section-last" style="padding-top:96px">
+    <div class="soon pad-56">
+      <div class="stack" style="gap:8px">
+        <span class="head" style="font-size:26px">Want to mentor or judge at a future SCPEC?</span>
+        <span class="muted" style="font-size:16px">Staff physicians and senior residents with POCUS experience: we'd love to hear from you.</span>
+      </div>
+      <a class="btn btn-outline" href={`mailto:${site.email}`}>Email the team</a>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .sp-hero { background: var(--pale-blue); }
+  .sp-hero-inner { padding-top: 96px; padding-bottom: 88px; display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 40px; }
+  .dots { display: flex; }
+  .dots span { width: 72px; height: 72px; border-radius: 999px; border: 4px solid var(--pale-blue); }
+  .dots span + span { margin-left: -18px; }
+  .dot-plus { background: #fff; display: flex; align-items: center; justify-content: center; font-family: var(--font-head); font-weight: 800; font-size: 18px; color: var(--blue); }
+  .keynote { border-radius: 24px; overflow: hidden; display: flex; flex-wrap: wrap; background: var(--navy); color: #fff; }
+  .kn-meet { flex: 0 1 280px; min-width: 0; background: var(--blue); padding: 40px; display: flex; flex-direction: column; justify-content: space-between; gap: 32px; }
+  .kn-photo { flex: 0 1 320px; min-width: 0; min-height: 320px; background: var(--ink-blue); display: grid; overflow: hidden; }
+  .kn-photo :global(img) { grid-area: 1 / 1; width: 100%; height: 100%; object-fit: cover; }
+  .kn-body { flex: 1 1 360px; min-width: 0; padding: 40px; display: flex; flex-direction: column; justify-content: center; gap: 12px; }
+  .shot-tag { grid-area: 1 / 1; align-self: end; justify-self: start; margin: 16px; background: rgba(6,18,38,0.7); color: #fff; font-size: 13px; font-weight: 600; padding: 6px 10px; border-radius: 6px; }
+  .people { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px; }
+  .person { overflow: hidden; display: flex; flex-direction: column; }
+  .person-photo { height: 220px; background: #DCE6F7; display: grid; overflow: hidden; }
+  .person-photo :global(img) { grid-area: 1 / 1; width: 100%; height: 100%; object-fit: cover; }
+  .person-photo .shot-tag { margin: 12px; }
+  .session { align-self: flex-start; background: var(--navy); color: #fff; font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 999px; }
+  .judges { background: var(--pale-blue); }
+  .judge-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+  .judge { border-radius: 12px; padding: 20px; display: flex; align-items: center; gap: 16px; }
+  .judge-dot { flex: 0 0 56px; height: 56px; border-radius: 999px; background: var(--pale-blue); }
+  .soon { background: var(--pale-blue); border-radius: 24px; padding: 48px 56px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 24px; }
+  @media (max-width: 720px) {
+    .sp-hero-inner { padding-top: 64px; padding-bottom: 56px; }
+    .kn-meet, .kn-photo, .kn-body { flex-basis: 100%; }
+    .kn-meet { flex-direction: row; align-items: flex-end; padding: 28px 24px; }
+    .kn-photo { min-height: 260px; }
+    .kn-body { padding: 28px 24px; }
+    .dots span { width: 56px; height: 56px; }
+  }
+</style>

@@ -1,0 +1,79 @@
+---
+import { Image } from 'astro:assets';
+import site from '../content/en/site.json';
+import logoMark from '../assets/logo/scpec-mark.png';
+import { url } from '../lib/url';
+
+// "full" = the four-column footer from the home design; "simple" = the one-line footer used on inner pages.
+interface Props { variant?: 'full' | 'simple'; lastLink?: 'faq' | 'home' }
+const { variant = 'simple', lastLink = 'faq' } = Astro.props;
+---
+<footer class="foot on-dark">
+  {variant === 'full' ? (
+    <>
+      <div class="container foot-grid">
+        <div class="stack" style="gap:16px">
+          <span class="foot-brand-row foot-brand-row--lg">
+            <Image src={logoMark} alt="" height={56} densities={[1, 2]} />
+            <span class="foot-brand" style="font-size:24px">SCPEC</span>
+          </span>
+          <span style="font-size:15px;line-height:1.55">{site.fullName}. Student-led since 2021.</span>
+        </div>
+        <div class="foot-col">
+          <span class="foot-title">Conference</span>
+          <a href={url('/program')}>Program</a>
+          <a href={url('/case-competition')}>Case competition</a>
+          <a href={url('/speakers')}>Speakers &amp; judges</a>
+        </div>
+        <div class="foot-col">
+          <span class="foot-title">Community</span>
+          <a href={url('/about')}>About</a>
+          <a href={url('/team')}>Team</a>
+          <a href={url('/archive')}>Abstracts archive</a>
+        </div>
+        <div class="foot-col">
+          <span class="foot-title">Contact</span>
+          <a href={`mailto:${site.email}`}>{site.email}</a>
+          <a href={site.instagram}>Instagram {site.instagramHandle}</a>
+          <a href={url('/faq')}>FAQ</a>
+        </div>
+      </div>
+      <div class="container foot-bottom">© {site.year} SCPEC. Registration data is used only to run the conference.</div>
+    </>
+  ) : (
+    <div class="container foot-simple">
+      <span class="foot-brand-row"><Image src={logoMark} alt="" height={36} densities={[1, 2]} /><span class="foot-brand">SCPEC</span></span>
+      <span class="foot-links">
+        <a href={`mailto:${site.email}`}>{site.email}</a>
+        <a href={site.instagram}>{site.instagramHandle}</a>
+        {lastLink === 'home' ? <a href={url('/')}>Home</a> : <a href={url('/faq')}>FAQ</a>}
+      </span>
+    </div>
+  )}
+</footer>
+
+<style>
+  .foot { background: var(--navy); color: var(--on-dark); }
+  .foot a { color: var(--on-dark); text-decoration: none; }
+  .foot a:hover { color: #fff; text-decoration: underline; }
+  .foot-brand { font-family: var(--font-head); font-weight: 800; font-size: 20px; color: #fff; }
+  .foot-brand-row { display: flex; align-items: center; gap: 12px; align-self: flex-start; }
+  .foot-brand-row :global(img) { width: auto; height: 36px; flex: 0 0 auto; }
+  .foot-brand-row--lg :global(img) { height: 56px; }
+  .foot-simple { align-items: center; }
+  .foot-grid {
+    padding-top: 64px; padding-bottom: 40px;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px;
+  }
+  .foot-col { display: flex; flex-direction: column; gap: 10px; font-size: 15px; }
+  .foot-title { font-weight: 600; color: #fff; }
+  .foot-bottom {
+    padding-top: 24px; padding-bottom: 40px; font-size: 13px; color: #9FB0CC;
+    border-top: 1px solid rgba(255,255,255,0.12);
+  }
+  .foot-simple {
+    padding-top: 48px; padding-bottom: 48px;
+    display: flex; flex-wrap: wrap; justify-content: space-between; gap: 24px; font-size: 15px;
+  }
+  .foot-links { display: flex; flex-wrap: wrap; gap: 24px; }
+</style>

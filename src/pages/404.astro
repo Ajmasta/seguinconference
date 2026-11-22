@@ -1,0 +1,14 @@
+---
+import Base from '../layouts/Base.astro';
+import { url } from '../lib/url';
+---
+<Base title="Page not found · SCPEC" description="This page does not exist.">
+  <section class="container section section-last">
+    <div class="stack" style="gap:20px;max-width:640px">
+      <div class="eyebrow">404</div>
+      <h1 class="display display-72">Page not found.</h1>
+      <p class="lead">The page you are looking for has moved or never existed.</p>
+      <a class="btn btn-primary" href={url('/')} style="align-self:flex-start">Back to home</a>
+    </div>
+  </section>
+</Base>
