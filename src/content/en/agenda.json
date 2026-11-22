@@ -1,15 +1,6 @@
 {
-  "_note": "Provisional until the final run-of-show is confirmed (Linda / Chairs). start/end are minutes after midnight Eastern: 780 = 1:00 PM.",
+  "_note": "Provisional until the final run-of-show is confirmed (Linda / Chairs). start/end are minutes after midnight Eastern: 780 = 1:00 PM. Time zones live in src/scripts/tz.ts.",
   "provisional": true,
-  "zones": [
-    { "id": "PT", "label": "Pacific", "shift": -180, "abbr": "PST" },
-    { "id": "MT", "label": "Mountain", "shift": -120, "abbr": "MST" },
-    { "id": "CT", "label": "Central", "shift": -60, "abbr": "CST" },
-    { "id": "ET", "label": "Eastern", "shift": 0, "abbr": "EST" },
-    { "id": "AT", "label": "Atlantic", "shift": 60, "abbr": "AST" },
-    { "id": "NT", "label": "Newfoundland", "shift": 90, "abbr": "NST" }
-  ],
-  "defaultZone": "ET",
   "items": [
     { "start": 780, "end": 790, "title": "Welcome", "desc": "Opening remarks from the Chairs and a remembrance of Ryan Séguin.", "tag": "All attendees" },
     { "start": 790, "end": 820, "title": "Keynote", "desc": "Speaker announced soon. An opening talk on the future of POCUS education.", "tag": "All attendees" },

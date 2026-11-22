@@ -8,8 +8,10 @@ import { url, fmtTime } from '../lib/url';
 import ultrasoundCart from '../assets/images/ultrasound-cart.jpg';
 import cardiacScreen from '../assets/images/cardiac-screen.jpg';
 
-const def = agenda.zones.find((z) => z.id === agenda.defaultZone)!;
-const timeLabel = (s: number, e: number, shift: number, abbr: string) => `${fmtTime(s + shift)}–${fmtTime(e + shift)} ${abbr}`;
+import { ZONES as zones } from '../scripts/tz';
+// Agenda times are written in Eastern; the page shows them in the visitor's zone once loaded.
+const def = zones.find((z) => z.id === 'ET')!;
+const timeLabel = (s: number, e: number) => `${fmtTime(s)}–${fmtTime(e)} ${def.suffix}`;
 const regPh = site.registerUrlIsPlaceholder ? 'register-link' : undefined;
 ---
 <Base
@@ -37,15 +39,16 @@ const regPh = site.registerUrlIsPlaceholder ? 'register-link' : undefined;
     <div class="agenda-head">
       <h2 class="h2-36">Agenda</h2>
       <div class="segmented" role="group" aria-label="Show times in">
-        {agenda.zones.map((z) => (
-          <button type="button" data-zone={z.id} data-shift={z.shift} data-abbr={z.abbr} aria-pressed={z.id === def.id ? 'true' : 'false'}>{z.label}</button>
+        {zones.map((z) => (
+          <button type="button" data-zone={z.id} title={z.title} aria-pressed={z.id === def.id ? 'true' : 'false'}>{z.label}</button>
         ))}
+        <button type="button" data-zone-local hidden aria-pressed="false">Your time</button>
       </div>
     </div>
-    <div class="card agenda" data-placeholder={agenda.provisional ? 'run-of-show' : undefined}>
+    <div class="card agenda" data-placeholder={agenda.provisional ? 'run-of-show' : undefined} data-event-start={site.eventStartUtc} data-first-minute={agenda.items[0].start}>
       {agenda.items.map((it) => (
         <div class="agenda-row">
-          <div class="agenda-time" data-start={it.start} data-end={it.end}>{timeLabel(it.start, it.end, def.shift, def.abbr)}</div>
+          <div class="agenda-time" data-start={it.start} data-end={it.end}>{timeLabel(it.start, it.end)}</div>
           <div class="agenda-body">
             <span class="head" style="font-size:20px">{it.title}</span>
             <span class="muted" style="font-size:16px;line-height:1.55">{it.desc}</span>
@@ -98,31 +101,47 @@ const regPh = site.registerUrlIsPlaceholder ? 'register-link' : undefined;
 </Base>
 
 <script>
-  // Time-zone switcher: shifts every agenda time by the chosen zone's offset from Eastern.
-  const fmt = (mins: number) => {
-    const h = Math.floor(mins / 60), m = mins % 60;
-    const h12 = h > 12 ? h - 12 : h === 0 ? 12 : h;
-    return `${h12}:${m < 10 ? '0' + m : m}`;
-  };
-  const buttons = document.querySelectorAll<HTMLButtonElement>('[data-zone]');
+  // Agenda times follow the visitor's time zone: detected automatically, or the one they
+  // picked here or on the home page (saved in localStorage and shared between pages).
+  import { current, detected, choose, clockRange, suffix, selectionName, EVENT } from '../scripts/tz';
+
+  const agendaEl = document.querySelector<HTMLElement>('[data-event-start]');
+  const eventStart = Date.parse(agendaEl?.dataset.eventStart ?? '');
+  const firstMinute = Number(agendaEl?.dataset.firstMinute);
+  // Agenda minutes are Eastern wall-clock; convert to real instants relative to the event start.
+  const toMs = (mins: number) => eventStart + (mins - firstMinute) * 60000;
+
+  const zoneButtons = document.querySelectorAll<HTMLButtonElement>('[data-zone]');
+  const localBtn = document.querySelector<HTMLButtonElement>('[data-zone-local]');
   const status = document.getElementById('tz-status');
-  const apply = (btn: HTMLButtonElement) => {
-    const shift = Number(btn.dataset.shift);
-    const abbr = btn.dataset.abbr!;
-    buttons.forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
+
+  // If the visitor is outside Canada, offer a "Your time" button for their own zone.
+  const here = detected();
+  if (localBtn && here.kind === 'iana') {
+    localBtn.hidden = false;
+    localBtn.textContent = `Your time (${selectionName(here)})`;
+  }
+
+  const render = () => {
+    const sel = current();
+    const id = sel.kind === 'zone' ? sel.zone.id : null;
+    zoneButtons.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.zone === id)));
+    localBtn?.setAttribute('aria-pressed', String(id === null));
+    const sfx = suffix(eventStart, sel);
     document.querySelectorAll<HTMLElement>('.agenda-time').forEach((el) => {
-      const s = Number(el.dataset.start) + shift, e = Number(el.dataset.end) + shift;
-      el.textContent = `${fmt(s)}–${fmt(e)} ${abbr}`;
+      el.textContent = `${clockRange(toMs(+el.dataset.start!), toMs(+el.dataset.end!), sel)} ${sfx}`;
     });
-    if (status) status.textContent = `Showing times in ${btn.textContent} time`;
-    try { localStorage.setItem('scpec-zone', btn.dataset.zone!); } catch {}
+    if (status) status.textContent = `Showing times in ${selectionName(sel)} time`;
   };
-  buttons.forEach((b) => b.addEventListener('click', () => apply(b)));
-  try {
-    const saved = localStorage.getItem('scpec-zone');
-    const btn = saved && document.querySelector<HTMLButtonElement>(`[data-zone="${saved}"]`);
-    if (btn) apply(btn);
-  } catch {}
+
+  // Clicking the zone you're already detected in clears the saved choice (back to automatic).
+  zoneButtons.forEach((b) => b.addEventListener('click', () => {
+    const auto = detected();
+    choose(auto.kind === 'zone' && auto.zone.id === b.dataset.zone ? null : b.dataset.zone!);
+  }));
+  localBtn?.addEventListener('click', () => choose(null));
+  window.addEventListener(EVENT, render);
+  render();
 </script>
 
 <style>

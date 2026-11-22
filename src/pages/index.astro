@@ -15,6 +15,7 @@ const programCards = [
   { n: '04', title: 'Workshop B · Scanning', text: 'Virtual teaching on the high-yield POCUS scans every student should know.', href: '/program' },
 ];
 const regPh = site.registerUrlIsPlaceholder ? 'register-link' : undefined;
+import { ZONES as zones } from '../scripts/tz';
 ---
 <Base
   title="SCPEC 2027 · Séguin Canadian POCUS Education Conference"
@@ -42,9 +43,9 @@ const regPh = site.registerUrlIsPlaceholder ? 'register-link' : undefined;
   <!-- Date band + countdown -->
   <section class="date-band on-dark">
     <div class="container-wide date-inner">
-      <span class="date-day">09 JAN</span>
+      <span class="date-day" data-tz-day>09 JAN</span>
       <span class="date-meta">
-        <span>Saturday · 1–4 PM EST</span>
+        <span data-tz-when>Saturday · 1–4 PM EST</span>
         <span style="color:var(--light-blue)">Free · On Zoom</span>
       </span>
       <span class="date-rule" aria-hidden="true"></span>
@@ -56,7 +57,13 @@ const regPh = site.registerUrlIsPlaceholder ? 'register-link' : undefined;
           <span><span data-cd="m">–</span><span class="cd-unit"> min</span></span>
         </span>
       </span>
-      <a class="tz-link" href="https://www.timeanddate.com/worldclock/converter.html">Convert to my time zone →</a>
+      <span class="tz-pick">
+        <label for="tz-select">Time zone</label>
+        <select id="tz-select" data-tz-select>
+          <option value="">Auto (detected)</option>
+          {zones.map((z) => <option value={z.id}>{z.title === z.label ? z.label : `${z.label}: ${z.title}`}</option>)}
+        </select>
+      </span>
     </div>
   </section>
 
@@ -167,6 +174,29 @@ const regPh = site.registerUrlIsPlaceholder ? 'register-link' : undefined;
 </Base>
 
 <script>
+  import { current, detected, choose, compactRange, dayParts, suffix, selectionName, EVENT } from '../scripts/tz';
+
+  // Date band in the visitor's time zone (detected, or the one they picked and saved).
+  const cdEl = document.querySelector<HTMLElement>('[data-countdown]');
+  const startMs = Date.parse(cdEl?.dataset.countdown ?? '');
+  const endMs = Date.parse(cdEl?.dataset.end ?? '');
+  const select = document.querySelector<HTMLSelectElement>('[data-tz-select]');
+  const renderZone = () => {
+    const sel = current();
+    const d = dayParts(startMs, sel);
+    const day = document.querySelector('[data-tz-day]');
+    const when = document.querySelector('[data-tz-when]');
+    if (day) day.textContent = `${d.day} ${d.month}`;
+    if (when) when.textContent = `${d.weekday} · ${compactRange(startMs, endMs, sel)} ${suffix(startMs, sel)}`;
+    if (select) {
+      select.options[0].textContent = `Auto: ${selectionName(detected())}`;
+      select.value = !sel.auto && sel.kind === 'zone' ? sel.zone.id : '';
+    }
+  };
+  select?.addEventListener('change', () => choose(select.value || null));
+  window.addEventListener(EVENT, renderZone);
+  renderZone();
+
   // Live countdown to the conference start. Refreshes every 30 seconds.
   const el = document.querySelector<HTMLElement>('[data-countdown]');
   if (el) {
@@ -233,11 +263,22 @@ const regPh = site.registerUrlIsPlaceholder ? 'register-link' : undefined;
   .cd-label { font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--light-blue); }
   .countdown { display: flex; gap: 14px; align-items: baseline; font-family: var(--font-head); font-weight: 800; font-size: 32px; line-height: 1; }
   .cd-unit { font-size: 14px; font-weight: 600; color: var(--light-blue); }
-  .tz-link { margin-left: auto; color: var(--on-dark); font-size: 15px; font-weight: 600; }
-  .tz-link:hover { color: #fff; }
+  .tz-pick { margin-left: auto; display: flex; flex-direction: column; gap: 6px; min-width: 0; max-width: 100%; }
+  .tz-pick select { width: 260px; max-width: 100%; text-overflow: ellipsis; }
+  .tz-pick label { font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--light-blue); }
+  .tz-pick select {
+    min-height: 44px; padding: 8px 36px 8px 12px; border-radius: 8px; cursor: pointer;
+    border: 1px solid rgba(255,255,255,0.3); background-color: rgba(255,255,255,0.06); color: #fff;
+    font: 600 15px var(--font-body); appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%238FB4FF' stroke-width='1.8'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 12px center;
+  }
+  .tz-pick select:hover { border-color: rgba(255,255,255,0.6); }
+  .tz-pick option { color: var(--navy); background: #fff; }
+  :global(html:not(.js)) .tz-pick { display: none; }
   @media (max-width: 720px) {
     .date-rule { display: none; }
-    .tz-link { margin-left: 0; }
+    .tz-pick { margin-left: 0; }
   }
 
   @media (prefers-reduced-motion: reduce) {
