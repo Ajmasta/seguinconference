@@ -2,7 +2,7 @@
 
 Astro static site for the Séguin Canadian POCUS Education Conference. Built from the designs in `../design/`.
 
-Live site: https://ajmasta.github.io/seguinconference/ (deploys automatically on every push to `main`).
+Live site: https://seguincpec.ca (GitHub Pages custom domain; DNS at GoDaddy. Deploys automatically on every push to `main`).
 
 ## Run it locally
 

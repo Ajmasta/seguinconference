@@ -1,18 +1,20 @@
 {
-  "_note": "Provisional until the final run-of-show is confirmed (Linda / Chairs). start/end are minutes after midnight Eastern: 780 = 1:00 PM. Time zones live in src/scripts/tz.ts.",
+  "_note": "Run-of-show from Justin's email (Nov 2026); still open to tweaks from the Chairs, so keep provisional true until it's final. start/end are minutes after midnight Eastern: 780 = 1:00 PM. Time zones live in src/scripts/tz.ts.",
   "provisional": true,
   "items": [
     { "start": 780, "end": 790, "title": "Welcome", "desc": "Opening remarks from the Chairs and a remembrance of Ryan Séguin.", "tag": "All attendees" },
-    { "start": 790, "end": 820, "title": "Keynote", "desc": "Speaker announced soon. An opening talk on the future of POCUS education.", "tag": "All attendees" },
-    { "start": 820, "end": 900, "title": "Case competition", "desc": "Updates from last year’s grant winners, then teams present live in breakout rooms.", "tag": "Teams + audience" },
-    { "start": 900, "end": 930, "title": "Workshops A and B (choose one)", "desc": "Workshop A: mentorship speed round, small-group Q&As with POCUS leaders from across Canada. Workshop B: high-yield scans for medical students, led by a resident. Both run at the same time in breakout rooms.", "tag": "Workshop A or B" },
-    { "start": 930, "end": 960, "title": "Closing and case competition winners", "desc": "The three winning teams are announced and present their pitch to everyone, then closing remarks from the Chairs.", "tag": "All attendees" }
+    { "start": 790, "end": 810, "title": "Keynote", "desc": "Speaker announced soon. An opening talk on the future of POCUS education.", "tag": "All attendees" },
+    { "start": 810, "end": 900, "title": "Case competition", "desc": "Updates from last year’s grant winners, then teams present live in breakout rooms.", "tag": "Teams + audience" },
+    { "start": 900, "end": 920, "title": "Workshop A: Mentorship", "desc": "A speed round of small-group Q&As with POCUS leaders from across Canada.", "tag": "All attendees" },
+    { "start": 920, "end": 945, "title": "Workshop B: Virtual POCUS teaching", "desc": "High-yield scans for medical students, led by a resident.", "tag": "All attendees" },
+    { "start": 945, "end": 960, "title": "Closing and winners", "desc": "Case competition winners are announced, then closing remarks from the Chairs.", "tag": "All attendees" }
   ],
   "timeline": [
     { "weight": 10, "label": "1:00", "color": "rgba(255,255,255,0.45)", "minor": true },
-    { "weight": 30, "label": "1:10 · Keynote", "color": "#FFFFFF" },
-    { "weight": 80, "label": "1:40 · Case competition", "color": "#0B1F3A" },
-    { "weight": 30, "label": "3:00 · Workshops", "color": "#8FB4FF" },
-    { "weight": 30, "label": "3:30 · Closing", "color": "rgba(255,255,255,0.7)" }
+    { "weight": 20, "label": "1:10 · Keynote", "color": "#FFFFFF" },
+    { "weight": 90, "label": "1:30 · Case competition", "color": "#0B1F3A" },
+    { "weight": 20, "label": "3:00 · Workshop A", "color": "#8FB4FF" },
+    { "weight": 25, "label": "3:20 · Workshop B", "color": "#5B8CFF" },
+    { "weight": 15, "label": "3:45 · Closing", "color": "rgba(255,255,255,0.7)" }
   ]
 }
