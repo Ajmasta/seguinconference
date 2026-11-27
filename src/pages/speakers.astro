@@ -4,6 +4,11 @@ import type { ImageMetadata } from 'astro';
 import Base from '../layouts/Base.astro';
 import site from '../content/en/site.json';
 import speakers from '../content/en/speakers.json';
+import { confirmed } from '../lib/content';
+
+// Unconfirmed (placeholder) speakers and judges are hidden; the page drops out of the menu until someone confirms.
+const people = confirmed(speakers.people);
+const judges = confirmed(speakers.judges);
 
 // Headshots: drop image files in src/assets/headshots/ and put the file name in speakers.json.
 const shots = import.meta.glob<{ default: ImageMetadata }>('../assets/headshots/*.{jpg,jpeg,png,webp}', { eager: true });
@@ -34,7 +39,7 @@ const keyShot = shot(k.headshot);
     </div>
   </section>
 
-  <section class="container" style="padding-top:72px">
+  {!k.placeholder && <section class="container" style="padding-top:72px">
     <h2 class="h2-32" style="margin-bottom:24px">Keynote</h2>
     <div class="keynote on-dark" data-placeholder={k.placeholder ? 'keynote' : undefined}>
       <div class="kn-meet">
@@ -53,13 +58,13 @@ const keyShot = shot(k.headshot);
         <span style="font-size:13px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--light-blue)">{k.time}</span>
       </div>
     </div>
-  </section>
+  </section>}
 
-  <section class="container" style="padding-top:72px">
+  {people.length > 0 && <section class="container" style="padding-top:72px">
     <h2 class="h2-32" style="margin-bottom:8px">Workshop mentors &amp; teachers</h2>
     <p class="muted" style="margin-bottom:24px;font-size:16px">Workshop A mentors and the Workshop B lead.</p>
     <div class="people">
-      {speakers.people.map((p) => {
+      {people.map((p) => {
         const img = shot(p.headshot);
         return (
           <div class="card person" data-placeholder={p.placeholder ? 'speaker' : undefined}>
@@ -75,14 +80,14 @@ const keyShot = shot(k.headshot);
         );
       })}
     </div>
-  </section>
+  </section>}
 
-  <section class="judges band">
+  {judges.length > 0 && <section class="judges band">
     <div class="container" style="padding-top:88px;padding-bottom:88px">
       <h2 class="h2-32" style="margin-bottom:8px">Case competition judges</h2>
       <p class="muted" style="margin-bottom:24px;font-size:16px">Staff physicians and residents in emergency medicine, internal medicine, family medicine and anesthesia.</p>
       <div class="judge-grid">
-        {speakers.judges.map((j) => (
+        {judges.map((j) => (
           <div class="card judge" data-placeholder={j.placeholder ? 'judge' : undefined}>
             <div class="judge-dot" aria-hidden="true"></div>
             <div class="stack" style="gap:4px;min-width:0">
@@ -93,7 +98,7 @@ const keyShot = shot(k.headshot);
         ))}
       </div>
     </div>
-  </section>
+  </section>}
 
   <section class="container section-last" style="padding-top:96px">
     <div class="soon pad-56">

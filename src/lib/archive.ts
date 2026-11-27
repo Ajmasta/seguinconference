@@ -21,8 +21,12 @@ export interface Year {
 
 const files = import.meta.glob<{ default: Year }>('../content/en/archive/*.json', { eager: true });
 
-export const years: Year[] = Object.values(files)
-  .map((m) => m.default)
+// Placeholder winners/abstracts are dropped; a past year with nothing confirmed is hidden entirely.
+const all: Year[] = Object.values(files).map((m) => m.default);
+const latest = Math.max(...all.map((y) => Number(y.year)));
+export const years: Year[] = all
+  .map((y) => ({ ...y, winners: y.winners.filter((w) => !w.placeholder), abstracts: y.abstracts.filter((a) => !a.placeholder) }))
+  .filter((y) => Number(y.year) === latest || y.winners.length > 0 || y.abstracts.length > 0)
   .sort((a, b) => Number(b.year) - Number(a.year));
 
 // Default tab: the most recent year that has abstracts.

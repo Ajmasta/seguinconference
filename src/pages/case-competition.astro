@@ -12,7 +12,7 @@ const SHOW_PRIZES = false;
 
 const glance = [
   { icon: 'users', label: 'Team', value: '1–4 students', text: 'Solo entries welcome. Teams can mix schools.' },
-  { icon: 'book', label: 'Abstract', value: '350 words', text: 'Use the official template and its sections.' },
+  { icon: 'book', label: 'Abstract', value: '350 words', text: 'Describe your school today, your project and how you would measure it.' },
   { icon: 'mic', label: 'Pitch', value: '7 minutes', text: 'Presented live with slides in a Zoom breakout room.' },
   { icon: 'star', label: 'Cost', value: 'Free', text: 'Open to students at any Canadian medical school.' },
 ] as const;
@@ -28,7 +28,9 @@ const criteria = [
   { icon: 'star', title: 'Impact & scalability', text: 'Lasting improvement, and whether other schools could adopt it.' },
   { icon: 'chart', title: 'Evaluation strategy', text: 'Clear metrics that show whether the project worked.' },
 ] as const;
-const teamPh = site.teamRegisterUrlIsPlaceholder ? 'team-register-link' : undefined;
+// One form registers people for the conference and the case competition.
+const teamPh = site.registerUrlIsPlaceholder ? 'register-link' : undefined;
+import { hasArchive } from '../lib/content';
 ---
 <Base
   title="Case Competition · SCPEC 2027"
@@ -47,7 +49,7 @@ const teamPh = site.teamRegisterUrlIsPlaceholder ? 'team-register-link' : undefi
         <span class="label" style="color:var(--light-blue);letter-spacing:0.1em">2027 theme</span>
         <span class="head" style="font-size:clamp(22px,2.6vw,30px);line-height:1.25">{site.theme}</span>
       </div>
-      <a class="btn btn-primary" href={site.teamRegisterUrl} data-placeholder={teamPh} style="padding:16px 28px">Register your team</a>
+      <a class="btn btn-primary" href={site.registerUrl} data-placeholder={teamPh} style="padding:16px 28px">Register your team</a>
     </div>
   </section>
 
@@ -116,30 +118,38 @@ const teamPh = site.teamRegisterUrlIsPlaceholder ? 'team-register-link' : undefi
         </div>
       )}
       <div class="extra card">
-        <span class="head" style="font-size:24px">Templates</span>
-        <span style="font-size:16px;line-height:1.6;color:var(--grey-dark)">Download the abstract and slide templates before you start.</span>
-        <span class="flex-wrap" style="gap:12px;padding-top:4px">
-          <a class="btn btn-outline" href={site.abstractTemplateUrl || '#abstract-template'} data-placeholder={site.abstractTemplateUrl ? undefined : 'abstract-template-link'} style="padding:12px 18px">Abstract template</a>
-          <a class="btn btn-outline" href={site.slideTemplateUrl || '#slide-template'} data-placeholder={site.slideTemplateUrl ? undefined : 'slide-template-link'} style="padding:12px 18px">Slide template</a>
-        </span>
-        {!(site.abstractTemplateUrl && site.slideTemplateUrl) && <span class="muted" style="font-size:13px;font-weight:600">Templates will be posted here soon.</span>}
+        <span class="head" style="font-size:24px">What to submit</span>
+        <ul class="submit-list">
+          <li><strong>Abstract:</strong> up to 350 words.</li>
+          <li><strong>Slide deck:</strong> for a 7-minute live pitch.</li>
+          <li><strong>How:</strong> registered teams get an upload link by email. Both are due {dates[1].date}.</li>
+        </ul>
+        {/* Template buttons appear automatically once abstractTemplateUrl / slideTemplateUrl are set in site.json. */}
+        {(site.abstractTemplateUrl || site.slideTemplateUrl) && (
+          <span class="flex-wrap" style="gap:12px;padding-top:4px">
+            {site.abstractTemplateUrl && <a class="btn btn-outline" href={site.abstractTemplateUrl} style="padding:12px 18px">Abstract template</a>}
+            {site.slideTemplateUrl && <a class="btn btn-outline" href={site.slideTemplateUrl} style="padding:12px 18px">Slide template</a>}
+          </span>
+        )}
       </div>
     </div>
-    <p class="muted" style="margin-top:24px;font-size:14px;line-height:1.6">With your consent at registration, your abstract and slides may be published in the <a href={url('/archive')}>SCPEC archive</a> after the conference. Questions about the competition: <a href={`mailto:${site.email}`}>{site.email}</a>.</p>
+    <p class="muted" style="margin-top:24px;font-size:14px;line-height:1.6">With your consent at registration, your abstract and slides may be published {hasArchive ? <>in the <a href={url('/archive')}>SCPEC archive</a></> : 'on this website'} after the conference. Questions about the competition: <a href={`mailto:${site.email}`}>{site.email}</a>.</p>
   </section>
 
   <section class="container section-last" style="padding-top:96px">
     <div class="cta on-dark pad-56">
       <div class="stack" style="gap:10px;max-width:640px">
         <h2 class="h2-44" style="line-height:1.05">How would you improve POCUS at your school?</h2>
-        <p style="font-size:17px;color:var(--on-blue)">Team registration closes {site.registrationCloses}.</p>
+        <p style="font-size:17px;color:var(--on-blue)">One form registers you for the conference and the case competition. Registration closes {site.registrationCloses}.</p>
       </div>
-      <a class="btn btn-white btn-lg" href={site.teamRegisterUrl} data-placeholder={teamPh} style="padding:18px 32px;border-radius:8px">Register your team</a>
+      <a class="btn btn-white btn-lg" href={site.registerUrl} data-placeholder={teamPh} style="padding:18px 32px;border-radius:8px">Register your team</a>
     </div>
   </section>
 </Base>
 
 <style>
+  .submit-list { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 8px; font-size: 16px; line-height: 1.6; color: var(--grey-dark); }
+  .submit-list strong { color: var(--navy); }
   .cc-hero { padding-top: 88px; padding-bottom: 72px; display: flex; flex-direction: column; gap: 24px; }
   .theme-bar { background: var(--navy); color: #fff; }
   .theme-inner { padding-top: 64px; padding-bottom: 64px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 32px; }

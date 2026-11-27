@@ -2,6 +2,10 @@
 import Base from '../layouts/Base.astro';
 import site from '../content/en/site.json';
 import faq from '../content/en/faq.json';
+import { confirmed } from '../lib/content';
+
+// Unconfirmed answers stay hidden until confirmed.
+const items = confirmed(faq.items);
 ---
 <Base
   title="FAQ & Contact · SCPEC 2027"
@@ -24,7 +28,7 @@ import faq from '../content/en/faq.json';
 
   <section class="container fq-main">
     <div class="card accordion">
-      {faq.items.map((f, i) => (
+      {items.map((f, i) => (
         <div class="acc-item" data-placeholder={f.placeholder ? 'faq-answer' : undefined}>
           <h2 class="acc-h">
             <button class="acc-q" type="button" id={`faq-q-${i}`} aria-expanded={i === 0 ? 'true' : 'false'} aria-controls={`faq-a-${i}`}>
@@ -46,13 +50,13 @@ import faq from '../content/en/faq.json';
         <a href={site.instagram} style="color:var(--on-dark);font-size:16px">Instagram {site.instagramHandle}</a>
         <span style="font-size:14px;line-height:1.5;color:var(--on-dark)">We usually reply within a few days.</span>
       </div>
-      <form class="card news" action={site.newsletterAction || undefined} method="post" data-placeholder={site.newsletterAction ? undefined : 'newsletter-endpoint'} data-news>
+      {site.newsletterAction && <form class="card news" action={site.newsletterAction || undefined} method="post" data-placeholder={site.newsletterAction ? undefined : 'newsletter-endpoint'} data-news>
         <h2 class="head" style="font-size:20px">Get conference updates</h2>
         <label for="news-email" style="font-size:14px;font-weight:600;color:var(--grey-dark)">Email address</label>
         <input id="news-email" name="email" type="email" placeholder="you@school.ca" autocomplete="email" required />
         <button class="btn btn-primary" type="submit" style="font-size:15px">Subscribe</button>
         <span class="news-msg muted" role="status" style="font-size:13px">A few emails a year. Unsubscribe anytime.</span>
-      </form>
+      </form>}
     </div>
   </section>
 
@@ -62,7 +66,9 @@ import faq from '../content/en/faq.json';
         <span class="head" style="font-size:26px">Partner with SCPEC</span>
         <span style="font-size:16px;line-height:1.55;color:var(--grey-dark)">Support student-led POCUS education across Canada. Partners are recognized on this site and at the conference.</span>
       </div>
-      <a class="btn btn-outline" href={site.sponsorshipPackageUrl || `mailto:${site.email}?subject=Sponsorship%20package`} data-placeholder={site.sponsorshipPackageUrl ? undefined : 'sponsorship-pdf'}>Sponsorship package (PDF)</a>
+      {site.sponsorshipPackageUrl
+        ? <a class="btn btn-outline" href={site.sponsorshipPackageUrl}>Sponsorship package (PDF)</a>
+        : <a class="btn btn-outline" href={`mailto:${site.email}?subject=Sponsorship`}>Email us about sponsorship</a>}
     </div>
   </section>
 </Base>

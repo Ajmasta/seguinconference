@@ -3,6 +3,7 @@ import { Image } from 'astro:assets';
 import site from '../content/en/site.json';
 import logoMark from '../assets/logo/scpec-mark.png';
 import { url } from '../lib/url';
+import { hasSpeakers, hasArchive } from '../lib/content';
 
 // "full" = the four-column footer from the home design; "simple" = the one-line footer used on inner pages.
 interface Props { variant?: 'full' | 'simple'; lastLink?: 'faq' | 'home' }
@@ -23,13 +24,13 @@ const { variant = 'simple', lastLink = 'faq' } = Astro.props;
           <span class="foot-title">Conference</span>
           <a href={url('/program')}>Program</a>
           <a href={url('/case-competition')}>Case competition</a>
-          <a href={url('/speakers')}>Speakers &amp; judges</a>
+          {hasSpeakers && <a href={url('/speakers')}>Speakers &amp; judges</a>}
         </div>
         <div class="foot-col">
           <span class="foot-title">Community</span>
           <a href={url('/about')}>About</a>
           <a href={url('/team')}>Team</a>
-          <a href={url('/archive')}>Abstracts archive</a>
+          {hasArchive && <a href={url('/archive')}>Abstracts archive</a>}
         </div>
         <div class="foot-col">
           <span class="foot-title">Contact</span>

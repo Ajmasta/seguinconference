@@ -3,6 +3,9 @@ import Base from '../../layouts/Base.astro';
 import updates from '../../content/en/updates.json';
 import { years, defaultYear, placeLabel } from '../../lib/archive';
 import { url } from '../../lib/url';
+import { confirmed } from '../../lib/content';
+
+const updateItems = confirmed(updates.items);
 ---
 <Base
   title="Abstracts & Archive · SCPEC"
@@ -89,7 +92,7 @@ import { url } from '../../lib/url';
   ))}
   <p class="visually-hidden" aria-live="polite" id="ar-status"></p>
 
-  <section class="now-band band">
+  {updateItems.length > 0 && <section class="now-band band">
     <div class="container" style="padding-top:88px;padding-bottom:88px">
       <div class="now pad-56">
         <div class="stack" style="flex:1 1 340px;min-width:0;gap:12px">
@@ -98,7 +101,7 @@ import { url } from '../../lib/url';
           <p class="muted" style="font-size:16px;line-height:1.6">Winning teams receive support to run their projects. Each spring we share how they went.</p>
         </div>
         <div class="stack" style="flex:1 1 480px;min-width:0;gap:16px">
-          {updates.items.map((u) => (
+          {updateItems.map((u) => (
             <div class="update" data-placeholder={u.placeholder ? 'update' : undefined}>
               <span class="head" style="font-size:18px">{u.title}</span>
               <span class="muted" style="font-size:15px;line-height:1.55">{u.text}</span>
@@ -107,7 +110,7 @@ import { url } from '../../lib/url';
         </div>
       </div>
     </div>
-  </section>
+  </section>}
 </Base>
 
 <script>

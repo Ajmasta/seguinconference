@@ -3,6 +3,7 @@ import Logo from './Logo.astro';
 import Icon from './Icon.astro';
 import site from '../content/en/site.json';
 import { url } from '../lib/url';
+import { hasSpeakers, hasArchive } from '../lib/content';
 
 interface Props { current?: string }
 const { current } = Astro.props;
@@ -15,7 +16,7 @@ const links = [
   { key: 'archive', href: '/archive', label: 'Archive' },
   { key: 'team', href: '/team', label: 'Team' },
   { key: 'faq', href: '/faq', label: 'FAQ' },
-];
+].filter((l) => (l.key !== 'speakers' || hasSpeakers) && (l.key !== 'archive' || hasArchive));
 ---
 <header class="site-header">
   <div class="container header-inner">
